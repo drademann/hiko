@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { App } from './app';
+import { WallboxComponent } from './wallbox.component';
 
-describe('The App', () => {
-  let component: App;
-  let fixture: ComponentFixture<App>;
+describe('WallboxComponent', () => {
+  let component: WallboxComponent;
+  let fixture: ComponentFixture<WallboxComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [App],
+      imports: [WallboxComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(App);
+    fixture = TestBed.createComponent(WallboxComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
