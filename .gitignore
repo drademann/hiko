@@ -25,6 +25,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+*.private.env.json
 
 # system files
 .DS_Store
