@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 import express from 'express';
 
 const host = process.env.HOST ?? 'localhost';
