@@ -8,9 +8,10 @@ export class WallboxServiceImpl implements WallboxService {
   constructor(@Inject() private repository: WallboxRepository) {}
 
   async currentState(): Promise<WallboxState> {
-    return this.repository.fetch().then((state) => ({
+    const state = await this.repository.fetch();
+    return {
       connectionState: this.mapConnState(state.get('conn_state')),
-    }));
+    };
   }
 
   //region mappings
