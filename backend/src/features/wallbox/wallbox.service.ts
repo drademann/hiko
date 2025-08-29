@@ -1,14 +1,18 @@
-import { Inject, Service } from 'typedi';
-import { WallboxService, WallboxServiceToken } from './wallbox.api';
-import { WallboxRepository } from './wallbox.repository';
+import { Container, Service, Token } from 'typedi';
+import { WallboxRepository, WallboxRepositoryToken } from './wallbox.repository';
 import { ConnectionState, WallboxState } from './wallbox.model';
+
+export interface WallboxService {
+  currentState(): Promise<WallboxState>;
+}
+
+export const WallboxServiceToken = new Token<WallboxService>('WallboxService');
 
 @Service({ id: WallboxServiceToken })
 export class WallboxServiceImpl implements WallboxService {
-  constructor(@Inject() private repository: WallboxRepository) {}
-
   async currentState(): Promise<WallboxState> {
-    const state = await this.repository.fetch();
+    const repository = Container.get<WallboxRepository>(WallboxRepositoryToken);
+    const state = await repository.fetch();
     return {
       connectionState: this.mapConnState(state.get('conn_state')),
     };

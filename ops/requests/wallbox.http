@@ -1,2 +1,7 @@
+### request to the wallbox itself
 GET http://{{wallboxIP}}/rest/full_state
 Content-Type: text/plain
+
+### request to hiko wallbox route
+GET http://{{localBackend}}/api/wallbox/state
+Content-Type: application/json

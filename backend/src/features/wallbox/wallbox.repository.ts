@@ -1,13 +1,16 @@
-import { Service } from 'typedi';
+import { Service, Token } from 'typedi';
 
-@Service()
+export const WallboxRepositoryToken = new Token<WallboxRepository>('WallboxRepository');
+
+// noinspection HttpUrlsUsage
+const wallboxURL = `http://${process.env.WALLBOX_HOST}/rest/full_state`;
+
+@Service({ id: WallboxRepositoryToken })
 export class WallboxRepository {
   async fetch(): Promise<Map<string, string>> {
-    const res = await fetch('http://192.168.178.72/rest/full_state');
-    return res
-      .text()
-      .then((body) => body.split('\n'))
-      .then((lines) => lines.map((line) => line.split(':').map((s) => s.trim()) as [string, string]))
-      .then((pairs) => new Map(pairs));
+    const res = await fetch(wallboxURL);
+    const body = await res.text();
+    const pairs = body.split('\n').map((line) => line.split(':').map((s) => s.trim()) as [string, string]);
+    return new Map(pairs);
   }
 }

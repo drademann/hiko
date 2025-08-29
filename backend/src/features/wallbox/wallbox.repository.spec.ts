@@ -14,7 +14,7 @@ describe('WallboxRepository', () => {
     const result = await repo.fetch();
 
     expect(fetchSpy).toHaveBeenCalledTimes(1);
-    expect(fetchSpy).toHaveBeenCalledWith('http://192.168.178.72/rest/full_state');
+    expect(fetchSpy).toHaveBeenCalledWith('http://wallbox-test-host/rest/full_state');
 
     expect(result).toBeInstanceOf(Map);
     expect(result.get('conn_state')).toBe('charging');
