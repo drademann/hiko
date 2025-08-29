@@ -3,5 +3,8 @@ export type WallboxState = {
 };
 
 export enum ConnectionState {
-  NoVehicleConnected = 'no_vehicle_connected',
+  NoVehicleConnected,
+  ConnectedNotLoading,
+  ConnectedLoading,
+  Unknown,
 }

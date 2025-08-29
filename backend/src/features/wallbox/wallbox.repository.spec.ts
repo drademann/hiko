@@ -7,7 +7,13 @@ describe('WallboxRepository', () => {
   });
 
   it('fetch() should call the wallbox endpoint and parse colon-separated lines into a Map', async () => {
-    const fetchSpy = jest.spyOn(global, 'fetch').mockResolvedValue(new Response(`conn_state:charging\npower:7.2\n`));
+    const fetchSpy = jest.spyOn(global, 'fetch').mockResolvedValue(
+      new Response(`
+          conn_state:charging
+          power_w: 7200
+          time_since_charging_start:390
+          transaction_wh: 42500`),
+    );
 
     const repo = new WallboxRepository();
 
@@ -18,6 +24,8 @@ describe('WallboxRepository', () => {
 
     expect(result).toBeInstanceOf(Map);
     expect(result.get('conn_state')).toBe('charging');
-    expect(result.get('power')).toBe('7.2'); // trims
+    expect(result.get('power_w')).toBe('7200'); // trims
+    expect(result.get('time_since_charging_start')).toBe('390');
+    expect(result.get('transaction_wh')).toBe('42500');
   });
 });

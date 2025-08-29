@@ -30,6 +30,10 @@ testem.log
 .env
 *.private.env.json
 
+# logs
+logs
+*.log
+
 # system files
 .DS_Store
 Thumbs.db
