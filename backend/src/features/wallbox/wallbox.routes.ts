@@ -3,24 +3,9 @@ import { Container } from 'typedi';
 import { Logger, LoggerToken } from '../../core/logger.service';
 import { WallboxService, WallboxServiceToken } from './wallbox.service';
 import { ConnectionState, WallboxState } from './wallbox.model';
+import { Unit, WallboxStateDTO } from '@hiko/api';
 
 const router = Router();
-
-type WallboxStateDTO = {
-  connectionState: string;
-  power: {
-    value: number;
-    unit: 'kW';
-  };
-  charged: {
-    value: number;
-    unit: 'kWh';
-  };
-  duration: {
-    value: number;
-    unit: 'seconds';
-  };
-};
 
 router.get('/state', async (_, res) => {
   const logger = Container.get<Logger>(LoggerToken).child({ route: '/api/wallbox/state' });
@@ -43,9 +28,9 @@ router.get('/state', async (_, res) => {
 function from(state: WallboxState): WallboxStateDTO {
   return {
     connectionState: map(state.connectionState),
-    charged: { value: state.charged, unit: 'kWh' },
-    duration: { value: state.duration.seconds(), unit: 'seconds' },
-    power: { value: state.power, unit: 'kW' },
+    charged: { value: state.charged, unit: Unit.kWh },
+    duration: { value: state.duration.seconds(), unit: Unit.Seconds },
+    power: { value: state.power, unit: Unit.kW },
   };
 }
 
