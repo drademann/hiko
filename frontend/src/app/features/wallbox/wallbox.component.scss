@@ -1,0 +1,41 @@
+.wallbox-grid {
+  color: #19448A;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 140px 200px;
+  gap: 0;
+
+  .status {
+    grid-column: span 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    p {
+      font-size: 3rem;
+      font-weight: bold;
+    }
+  }
+
+  .cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    p {
+      font-size: 3rem;
+      font-weight: bold;
+      margin: 20px;
+    }
+
+    .value {
+      padding-bottom: 20px;
+    }
+
+    .label {
+      font-size: 1.7rem;
+      margin: 7px;
+    }
+  }
+}
