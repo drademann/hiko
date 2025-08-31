@@ -1,19 +1,19 @@
 <div class="wallbox-grid">
   <div class="status">
-    <p>wird geladen</p>
+    <p>{{ status() }}</p>
   </div>
   <div class="cell">
-    <p class="value">11 kW</p>
+    <p class="value">{{ wallboxState()?.power?.value | number: '1.1-1' }} kW</p>
     <p class="label">aktuelle</p>
     <p class="label">Leistung</p>
   </div>
   <div class="cell">
-    <p class="value">42,5 kWh</p>
+    <p class="value">{{ wallboxState()?.charged?.value | number: '1.1-1' }} kWh</p>
     <p class="label">bisher</p>
     <p class="label">geladen</p>
   </div>
   <div class="cell">
-    <p class="value">3:42</p>
+    <p class="value">{{ wallboxState()?.duration?.value | hours }}</p>
     <p class="label">Ladezeit</p>
     <p class="label">bisher</p>
   </div>

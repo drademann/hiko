@@ -29,7 +29,7 @@ function from(state: WallboxState): WallboxStateDTO {
   return {
     connectionState: map(state.connectionState),
     charged: { value: state.charged, unit: Unit.kWh },
-    duration: { value: state.duration.seconds(), unit: Unit.Seconds },
+    duration: { value: state.duration.asSeconds(), unit: Unit.Seconds },
     power: { value: state.power, unit: Unit.kW },
   };
 }

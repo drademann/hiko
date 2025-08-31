@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { WallboxService } from './wallbox-service';
+import { WallboxService } from './wallbox.service';
 
 describe('WallboxService', () => {
   let service: WallboxService;
