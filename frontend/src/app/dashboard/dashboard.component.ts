@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatTabLink, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet, Router } from '@angular/router';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { DashboardService } from './dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,7 +12,12 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {
+  private router = inject(Router);
+  private refreshService = inject(DashboardService);
+
   refresh(): void {
-    console.log('refresh');
+    const currentRoute = this.router.url.split('/').pop() || '';
+    console.log(`DashboardComponent: triggering refresh for route: ${currentRoute}`);
+    this.refreshService.triggerRefresh(currentRoute);
   }
 }

@@ -2,5 +2,6 @@
   "name": "@hiko/api",
   "version": "0.0.1",
   "private": true,
+  "main": "./index.cjs",
   "dependencies": {}
 }
