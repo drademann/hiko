@@ -1,7 +1,5 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { DashboardService } from '../../dashboard/dashboard.service';
-import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-forecast',
@@ -9,21 +7,19 @@ import { filter } from 'rxjs/operators';
   templateUrl: './forecast.component.html',
   styleUrl: './forecast.component.scss',
 })
-export class ForecastComponent implements OnInit, OnDestroy {
-  private refreshService = inject(DashboardService);
-  private subscription?: Subscription;
+export class ForecastComponent {
+  private dashboardService = inject(DashboardService);
 
-  ngOnInit(): void {
-    this.subscription = this.refreshService.refresh$
-      .pipe(filter((route) => route === 'forecast'))
-      .subscribe(() => this.refresh());
-  }
-
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
+  constructor() {
+    effect(() => {
+      const refreshEvent = this.dashboardService.currentRefreshRoute();
+      if (refreshEvent?.route === 'forecast') {
+        this.refresh();
+      }
+    });
   }
 
   refresh(): void {
-    console.log('ForecastComponent: refreshing data...');
+    console.log('forecast refreshing data...');
   }
 }

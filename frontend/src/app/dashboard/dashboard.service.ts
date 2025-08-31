@@ -1,15 +1,22 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
+
+interface RefreshEvent {
+  route: string;
+  timestamp: number;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class DashboardService {
-  private refreshSubject = new Subject<string>();
+  private refreshSignal = signal<RefreshEvent | null>(null);
 
-  refresh$ = this.refreshSubject.asObservable();
+  readonly currentRefreshRoute = this.refreshSignal.asReadonly();
 
   triggerRefresh(route: string): void {
-    this.refreshSubject.next(route);
+    this.refreshSignal.set({
+      route,
+      timestamp: Date.now(),
+    });
   }
 }

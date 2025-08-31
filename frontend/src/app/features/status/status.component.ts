@@ -1,7 +1,5 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, effect } from '@angular/core';
 import { DashboardService } from '../../dashboard/dashboard.service';
-import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-status',
@@ -9,21 +7,19 @@ import { filter } from 'rxjs/operators';
   templateUrl: './status.component.html',
   styleUrl: './status.component.scss',
 })
-export class StatusComponent implements OnInit, OnDestroy {
-  private refreshService = inject(DashboardService);
-  private subscription?: Subscription;
+export class StatusComponent {
+  private dashboardService = inject(DashboardService);
 
-  ngOnInit(): void {
-    this.subscription = this.refreshService.refresh$
-      .pipe(filter((route) => route === 'status'))
-      .subscribe(() => this.refresh());
-  }
-
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
+  constructor() {
+    effect(() => {
+      const refreshEvent = this.dashboardService.currentRefreshRoute();
+      if (refreshEvent?.route === 'status') {
+        this.refresh();
+      }
+    });
   }
 
   refresh(): void {
-    console.log('StatusComponent: refreshing data...');
+    console.log('status refreshing data...');
   }
 }
