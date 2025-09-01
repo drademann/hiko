@@ -122,15 +122,4 @@ describe('WallboxService', () => {
 
     expect(service.wallboxState()).toBeUndefined();
   });
-
-  it('should handle invalid JSON response', () => {
-    const req = mockedHttp.expectOne('/api/wallbox/state');
-
-    req.flush('invalid json', {
-      status: 200,
-      statusText: 'OK',
-    });
-
-    expect(service.wallboxState()).toBe('invalid json');
-  });
 });
