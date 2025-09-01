@@ -9,8 +9,10 @@ export class HoursPipe implements PipeTransform {
     if (seconds === undefined) {
       return '--:--';
     }
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    return `${hours}:${minutes.toString().padStart(2, '0')}`;
+    const sign = seconds < 0 ? '-' : '';
+    const s = Math.abs(seconds);
+    const hours = Math.floor(s / 3600);
+    const minutes = Math.floor((s % 3600) / 60);
+    return `${sign}${hours}:${minutes.toString().padStart(2, '0')}`;
   }
 }
