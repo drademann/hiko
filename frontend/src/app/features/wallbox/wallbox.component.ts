@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy } from '@angular/core';
 import { WallboxService } from './wallbox.service';
 import { DecimalPipe } from '@angular/common';
 import { HoursPipe } from '../../core/hours-pipe';
@@ -10,9 +10,10 @@ import { DashboardService } from '../../dashboard/dashboard.service';
   templateUrl: './wallbox.component.html',
   styleUrl: './wallbox.component.scss',
 })
-export class WallboxComponent {
+export class WallboxComponent implements OnDestroy {
   private readonly wallboxService = inject(WallboxService);
   private dashboardService = inject(DashboardService);
+  private autoRefreshInterval?: number;
 
   readonly wallboxState = this.wallboxService.wallboxState;
   readonly status = computed(() => {
@@ -35,10 +36,40 @@ export class WallboxComponent {
         this.refresh();
       }
     });
+
+    effect(() => {
+      const connectionState = this.wallboxState()?.connectionState;
+      const isVehicleConnected = connectionState === 'ConnectedNotCharging' || connectionState === 'ConnectedCharging';
+
+      if (isVehicleConnected) {
+        this.startAutoRefresh();
+      } else {
+        this.stopAutoRefresh();
+      }
+    });
   }
 
   refresh(): void {
     console.log('wallbox refreshing data...');
     this.wallboxService.refresh();
+  }
+
+  private startAutoRefresh(): void {
+    if (!this.autoRefreshInterval) {
+      console.log('wallbox starting auto-refresh...');
+      this.autoRefreshInterval = setInterval(() => this.refresh(), 60000);
+    }
+  }
+
+  private stopAutoRefresh(): void {
+    if (this.autoRefreshInterval) {
+      console.log('wallbox stopping auto-refresh...');
+      clearInterval(this.autoRefreshInterval);
+      this.autoRefreshInterval = undefined;
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.stopAutoRefresh();
   }
 }
