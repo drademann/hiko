@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 
-interface RefreshEvent {
+export interface RefreshEvent {
   route: string;
   timestamp: number;
 }
