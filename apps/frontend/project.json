@@ -1,9 +1,9 @@
 {
   "name": "frontend",
-  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
-  "sourceRoot": "frontend/src",
+  "sourceRoot": "apps/frontend/src",
   "tags": [],
   "targets": {
     "build": {
@@ -11,17 +11,17 @@
       "outputs": ["{options.outputPath}"],
       "dependsOn": ["api:build"],
       "options": {
-        "outputPath": "dist/frontend",
-        "browser": "frontend/src/main.ts",
-        "tsConfig": "frontend/tsconfig.app.json",
+        "outputPath": "dist/apps/frontend",
+        "browser": "apps/frontend/src/main.ts",
+        "tsConfig": "apps/frontend/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
           {
             "glob": "**/*",
-            "input": "frontend/public"
+            "input": "apps/frontend/public"
           }
         ],
-        "styles": ["frontend/src/styles.scss"]
+        "styles": ["apps/frontend/src/styles.scss"]
       },
       "configurations": {
         "production": {
@@ -56,7 +56,7 @@
         },
         "development": {
           "buildTarget": "frontend:build:development",
-          "proxyConfig": "frontend/proxy.conf.json"
+          "proxyConfig": "apps/frontend/proxy.conf.json"
         }
       },
       "defaultConfiguration": "development"
@@ -74,7 +74,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "frontend/jest.config.ts"
+        "jestConfig": "apps/frontend/jest.config.ts"
       }
     },
     "serve-static": {
@@ -82,7 +82,7 @@
       "executor": "@nx/web:file-server",
       "options": {
         "buildTarget": "frontend:build",
-        "staticFilePath": "dist/frontend/browser",
+        "staticFilePath": "dist/apps/frontend/browser",
         "spa": true
       }
     }
