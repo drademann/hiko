@@ -9,6 +9,7 @@
     "build": {
       "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
+      "dependsOn": ["api:build"],
       "options": {
         "outputPath": "dist/frontend",
         "browser": "frontend/src/main.ts",

@@ -9,6 +9,7 @@
       "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
+      "dependsOn": ["api:build"],
       "options": {
         "platform": "node",
         "outputPath": "dist/backend",
