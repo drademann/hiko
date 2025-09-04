@@ -8,11 +8,16 @@ Hiko is an Nx monorepo containing a full-stack application for monitoring wallbo
 
 ## Architecture
 
-The project follows a feature-based architecture across three main packages:
+The project follows a library-based architecture within an Nx monorepo, organized into apps and reusable libraries:
 
-- **frontend/**: Angular 20 application using standalone components
-- **backend/**: Express.js server with TypeScript, using dependency injection via TypeDI
-- **api/**: Shared TypeScript types and interfaces (DTOs, models)
+### Apps (Orchestration Layer)
+- **apps/frontend/**: Angular 20 application using standalone components
+- **apps/backend/**: Minimal Express.js bootstrap that wires together backend libraries
+
+### Libraries (Business Logic)
+- **libs/shared/api/**: Shared TypeScript types and interfaces (DTOs, models)
+- **libs/backend/feature-wallbox/**: Wallbox domain logic (routes, services, repositories)
+- **libs/backend/middleware/**: Shared backend services (logging, middleware)
 
 ### Key Architectural Patterns
 
@@ -84,22 +89,32 @@ npx nx test backend --testNamePattern="WallboxService"
 
 ## Project Structure
 
-### Frontend (Angular)
+### Apps
+#### Frontend (apps/frontend/)
 - `src/app/features/`: Feature-based components (wallbox, forecast, status)
 - `src/app/core/`: Core utilities and pipes (hours-pipe)
 - Standalone components with SCSS styling
 - Uses Angular Material UI components
 
-### Backend (Express + TypeDI)
-- `src/features/`: Feature-based modules with routes, services, repositories
-- `src/core/`: Shared services (logging, middleware)
-- Dependency injection pattern with Container from TypeDI
-- Winston logging with structured logs
+#### Backend (apps/backend/)
+- `src/main.ts`: Application bootstrap that imports and registers libraries
+- Minimal orchestration layer that wires together backend libraries
 
-### API (Shared Types)
+### Libraries
+#### Shared API (libs/shared/api/)
 - `src/lib/api.ts`: Common DTOs and interfaces
 - Shared between frontend and backend for type safety
 - Includes measurement units and data transfer objects
+
+#### Backend Feature Wallbox (libs/backend/feature-wallbox/)
+- Feature-based wallbox domain logic
+- Routes, services, repositories for wallbox functionality
+- Uses dependency injection pattern with Container from TypeDI
+
+#### Backend Middleware (libs/backend/middleware/)
+- `src/lib/logging/`: Winston logging service and middleware
+- Shared backend services and utilities
+- Cross-cutting concerns like request logging
 
 ## Environment Configuration
 
@@ -108,12 +123,25 @@ npx nx test backend --testNamePattern="WallboxService"
   - `BACKEND_PORT` (default: 3000)
 - Frontend proxy configured in `proxy.conf.json` for development
 
+## TypeScript Path Mappings
+
+The project uses TypeScript path mappings for clean imports across libraries:
+
+```typescript
+"@hiko/api": ["libs/shared/api/src/index.ts"]
+"@hiko/backend-feature-wallbox": ["libs/backend/feature-wallbox/src/index.ts"]
+"@hiko/backend-middleware": ["libs/backend/middleware/src/index.ts"]
+```
+
+This enables imports like:
+- `import { WallboxDto } from '@hiko/api'`
+- `import { WallboxService } from '@hiko/backend-feature-wallbox'`
+- `import { LoggingService } from '@hiko/backend-middleware'`
+
 ## Build Dependencies
 
 The project has explicit build dependencies configured in Nx:
-- Frontend depends on API build completion
-- Backend depends on API build completion
-- This ensures shared types are built before dependent projects
+- All backend libraries are built independently
 
 ## Testing Strategy
 
