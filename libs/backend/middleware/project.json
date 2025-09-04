@@ -1,0 +1,27 @@
+{
+  "name": "backend-middleware",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/middleware/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/backend/middleware",
+        "tsConfig": "libs/backend/middleware/tsconfig.lib.json",
+        "packageJson": "libs/backend/middleware/package.json",
+        "main": "libs/backend/middleware/src/index.ts",
+        "assets": ["libs/backend/middleware/*.md"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/backend/middleware/jest.config.ts"
+      }
+    }
+  }
+}

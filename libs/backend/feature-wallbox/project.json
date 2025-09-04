@@ -1,0 +1,27 @@
+{
+  "name": "backend-feature-wallbox",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/feature-wallbox/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/backend/feature-wallbox",
+        "tsConfig": "libs/backend/feature-wallbox/tsconfig.lib.json",
+        "packageJson": "libs/backend/feature-wallbox/package.json",
+        "main": "libs/backend/feature-wallbox/src/index.ts",
+        "assets": ["libs/backend/feature-wallbox/*.md"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/backend/feature-wallbox/jest.config.ts"
+      }
+    }
+  }
+}

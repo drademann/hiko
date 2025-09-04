@@ -1,7 +1,14 @@
 import { WallboxRepository } from './wallbox.repository';
 
 describe('WallboxRepository', () => {
+  const originalEnv = process.env;
+
+  beforeEach(() => {
+    process.env = { ...originalEnv, WALLBOX_HOST: 'wallbox-test-host' };
+  });
+
   afterEach(() => {
+    process.env = originalEnv;
     jest.restoreAllMocks();
     jest.clearAllMocks();
   });

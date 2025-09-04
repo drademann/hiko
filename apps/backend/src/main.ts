@@ -1,14 +1,13 @@
 import 'reflect-metadata';
-import 'dotenv/config';
 
 import express from 'express';
 import { Container } from 'typedi';
-import { Logger, LoggerToken } from './core/logger.service';
-import { loggingMiddleware } from './core/logging.middleware';
-import { wallboxRoutes } from './features/wallbox/wallbox.routes';
+import { Logger, LoggerToken, loggingMiddleware } from '@hiko/backend-middleware';
+import { wallboxRoutes } from '@hiko/backend-feature-wallbox';
 
 const host = process.env.BACKEND_HOST ?? 'localhost';
 const port = process.env.BACKEND_PORT ? Number(process.env.BACKEND_PORT) : 3000;
+
 const log = Container.get<Logger>(LoggerToken);
 
 const app = express();

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { Container } from 'typedi';
-import { Logger, LoggerToken } from '../../core/logger.service';
+import { Logger, LoggerToken } from '@hiko/backend-middleware';
 import { WallboxService, WallboxServiceToken } from './wallbox.service';
 import { ConnectionState, WallboxState } from './wallbox.model';
 import { Unit, WallboxStateDTO } from '@hiko/api';

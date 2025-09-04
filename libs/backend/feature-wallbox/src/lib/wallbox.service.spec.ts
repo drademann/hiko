@@ -3,12 +3,21 @@ import { WallboxService, WallboxServiceImpl } from './wallbox.service';
 import { ConnectionState, kW, kWh } from './wallbox.model';
 import { Container } from 'typedi';
 import { Duration } from 'dayjs/plugin/duration';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
+import { LoggerToken } from '@hiko/backend-middleware';
 
 describe('WallboxService', () => {
   let service: WallboxService;
 
   beforeEach(() => {
+    const mockedLogger = {
+      child: jest.fn().mockReturnThis(),
+      debug: jest.fn(),
+      info: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+    };
+    Container.set(LoggerToken, mockedLogger);
     Container.set(WallboxRepositoryToken, new WallboxRepository());
     service = new WallboxServiceImpl();
   });
@@ -70,5 +79,6 @@ describe('WallboxService', () => {
   afterEach(() => {
     jest.restoreAllMocks();
     jest.clearAllMocks();
+    Container.reset();
   });
 });

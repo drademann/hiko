@@ -1,9 +1,9 @@
 import { Container, Service, Token } from 'typedi';
-import { Logger, LoggerToken } from '../../core/logger.service';
+import { Logger, LoggerToken } from '@hiko/backend-middleware';
 import { WallboxRepository, WallboxRepositoryToken } from './wallbox.repository';
 import { ConnectionState, kW, kWh, WallboxState } from './wallbox.model';
 import { Duration } from 'dayjs/plugin/duration';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 
 export interface WallboxService {
   currentState(): Promise<WallboxState>;

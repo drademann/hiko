@@ -1,5 +1,5 @@
 import { Service, Token } from 'typedi';
-import winston from 'winston';
+import * as winston from 'winston';
 
 type LogMetadata = string | number | boolean | object | null | undefined;
 
