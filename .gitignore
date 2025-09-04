@@ -45,3 +45,6 @@ Thumbs.db
 
 # frameworks
 .angular
+
+# AI
+.claude/
