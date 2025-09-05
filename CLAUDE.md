@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Hiko is an Nx monorepo containing a full-stack application for monitoring wallbox/charging station data. The project uses Angular for the frontend, Express with TypeScript for the backend, and shares types through a common API library.
+Hiko is an Nx monorepo containing a full-stack application for PV forecasts and monitoring wallbox/charging station data. The project uses Angular 20 for the frontend, Express with TypeScript for the backend, and shares types through common libraries.
 
 ## Architecture
 
@@ -15,14 +15,26 @@ The project follows a library-based architecture within an Nx monorepo, organize
 - **apps/backend/**: Minimal Express.js bootstrap that wires together backend libraries
 
 ### Libraries (Business Logic)
+
+#### Shared Libraries
 - **libs/shared/api/**: Shared TypeScript types and interfaces (DTOs, models)
+- **libs/shared/ui/**: Reusable UI components and pipes (e.g., hours-pipe)
+
+#### Frontend Feature Libraries
+- **libs/frontend/feature-dashboard/**: Dashboard feature module
+- **libs/frontend/feature-forecast/**: PV forecast feature module
+- **libs/frontend/feature-status/**: Status monitoring feature module
+- **libs/frontend/feature-wallbox/**: Wallbox monitoring feature module with service integration
+
+#### Backend Libraries
 - **libs/backend/feature-wallbox/**: Wallbox domain logic (routes, services, repositories)
 - **libs/backend/middleware/**: Shared backend services (logging, middleware)
 
 ### Key Architectural Patterns
 
 - **Nx Workspace**: Monorepo with shared dependencies and build orchestration
-- **Feature Modules**: Both frontend and backend organize code by features (e.g., wallbox)
+- **Feature Modules**: Both frontend and backend organize code by features
+- **Standalone Components**: Frontend uses Angular 20 standalone components
 - **Dependency Injection**: Backend uses TypeDI container for service management
 - **Proxy Configuration**: Frontend proxies `/api` requests to backend during development
 
@@ -36,11 +48,9 @@ npx nx run-many --target=build
 # Build specific project
 npx nx build frontend
 npx nx build backend
-npx nx build api
 
-# Build with dependencies
-npx nx build frontend  # automatically builds api first
-npx nx build backend   # automatically builds api first
+# Build a library
+npx nx build frontend-feature-dashboard
 ```
 
 ### Development Servers
@@ -63,10 +73,13 @@ npx nx run-many --target=test
 # Run tests for specific project
 npx nx test frontend
 npx nx test backend
-npx nx test api
+npx nx test frontend-feature-wallbox
 
 # Run tests with coverage
 npx nx test frontend --codeCoverage
+
+# Run tests in CI mode
+npx nx test frontend --configuration=ci
 ```
 
 ### Linting
@@ -76,6 +89,7 @@ npx nx run-many --target=lint
 
 # Lint specific project
 npx nx lint frontend
+npx nx lint frontend-feature-dashboard
 ```
 
 ### Single Test Execution
@@ -91,8 +105,7 @@ npx nx test backend --testNamePattern="WallboxService"
 
 ### Apps
 #### Frontend (apps/frontend/)
-- `src/app/features/`: Feature-based components (wallbox, forecast, status)
-- `src/app/core/`: Core utilities and pipes (hours-pipe)
+- `src/app/app.routes.ts`: Main application routing configuration
 - Standalone components with SCSS styling
 - Uses Angular Material UI components
 
@@ -101,20 +114,11 @@ npx nx test backend --testNamePattern="WallboxService"
 - Minimal orchestration layer that wires together backend libraries
 
 ### Libraries
-#### Shared API (libs/shared/api/)
-- `src/lib/api.ts`: Common DTOs and interfaces
-- Shared between frontend and backend for type safety
-- Includes measurement units and data transfer objects
-
-#### Backend Feature Wallbox (libs/backend/feature-wallbox/)
-- Feature-based wallbox domain logic
-- Routes, services, repositories for wallbox functionality
-- Uses dependency injection pattern with Container from TypeDI
-
-#### Backend Middleware (libs/backend/middleware/)
-- `src/lib/logging/`: Winston logging service and middleware
-- Shared backend services and utilities
-- Cross-cutting concerns like request logging
+Each library follows Nx conventions with:
+- `src/index.ts`: Public API exports
+- `project.json`: Nx project configuration
+- `jest.config.ts`: Test configuration
+- `tsconfig.*.json`: TypeScript configurations
 
 ## Environment Configuration
 
@@ -129,31 +133,37 @@ The project uses TypeScript path mappings for clean imports across libraries:
 
 ```typescript
 "@hiko/api": ["libs/shared/api/src/index.ts"]
+"@hiko/shared-ui": ["libs/shared/ui/src/index.ts"]
 "@hiko/backend-feature-wallbox": ["libs/backend/feature-wallbox/src/index.ts"]
 "@hiko/backend-middleware": ["libs/backend/middleware/src/index.ts"]
+"@hiko/frontend-feature-dashboard": ["libs/frontend/feature-dashboard/src/index.ts"]
+"@hiko/frontend-feature-forecast": ["libs/frontend/feature-forecast/src/index.ts"]
+"@hiko/frontend-feature-status": ["libs/frontend/feature-status/src/index.ts"]
+"@hiko/frontend-feature-wallbox": ["libs/frontend/feature-wallbox/src/index.ts"]
 ```
 
 This enables imports like:
 - `import { WallboxDto } from '@hiko/api'`
-- `import { WallboxService } from '@hiko/backend-feature-wallbox'`
-- `import { LoggingService } from '@hiko/backend-middleware'`
+- `import { HoursPipe } from '@hiko/shared-ui'`
+- `import { WallboxComponent } from '@hiko/frontend-feature-wallbox'`
 
 ## Build Dependencies
 
-The project has explicit build dependencies configured in Nx:
-- All backend libraries are built independently
+The project uses Nx's dependency graph to ensure correct build order:
+- Frontend and backend apps depend on shared libraries
+- Feature libraries can depend on shared libraries
+- All projects using `@hiko/api` will rebuild when API changes
 
 ## Testing Strategy
 
 - **Frontend**: Jest with Angular testing utilities
 - **Backend**: Jest with Node.js environment
-- **API**: Jest for type validation and utility testing
-- All projects use `passWithNoTests: true` configuration
+- All projects configured with `passWithNoTests: true`
 - CI configuration includes code coverage reporting
 
 ## Key Technologies
 
-- **Frontend**: Angular 20, Angular Material, SCSS, RxJS
+- **Frontend**: Angular 20, Angular Material, SCSS, RxJS, dayjs
 - **Backend**: Express 4, TypeDI, Winston logging, reflect-metadata
 - **Build**: Nx 21, esbuild (backend), Angular CLI (frontend)
 - **Testing**: Jest 30, Angular testing utilities
