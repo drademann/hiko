@@ -5,7 +5,7 @@ import { Container } from 'typedi';
 import { Logger, LoggerToken, loggingMiddleware } from '@hiko/backend-middleware';
 import { wallboxRoutes } from '@hiko/backend-feature-wallbox';
 
-const host = process.env.BACKEND_HOST ?? 'localhost';
+const host = process.env.BACKEND_HOST ?? '0.0.0.0';
 const port = process.env.BACKEND_PORT ? Number(process.env.BACKEND_PORT) : 3000;
 
 const log = Container.get<Logger>(LoggerToken);

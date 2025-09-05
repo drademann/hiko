@@ -1,0 +1,23 @@
+FROM node:24-alpine AS builder
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY nx.json ./
+COPY tsconfig.base.json ./
+
+COPY apps/backend ./apps/backend
+COPY libs/backend ./libs/backend
+COPY libs/shared ./libs/shared
+
+RUN npx nx run backend:build:production
+
+FROM node:24-alpine
+WORKDIR /app
+
+COPY --from=builder /app/dist/apps/backend .
+COPY package*.json ./
+RUN npm ci --production --omit=dev
+
+CMD ["node", "main.js"]
