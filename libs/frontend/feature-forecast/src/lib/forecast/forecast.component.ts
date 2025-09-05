@@ -2,7 +2,7 @@ import { Component, effect, inject } from '@angular/core';
 import { DashboardService } from '@hiko/frontend-feature-dashboard';
 
 @Component({
-  selector: 'app-forecast',
+  selector: 'lib-forecast',
   imports: [],
   templateUrl: './forecast.component.html',
   styleUrl: './forecast.component.scss',

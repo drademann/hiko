@@ -20,7 +20,11 @@
       "@hiko/api": ["libs/shared/api/src/index.ts"],
       "@hiko/backend-feature-wallbox": ["libs/backend/feature-wallbox/src/index.ts"],
       "@hiko/backend-middleware": ["libs/backend/middleware/src/index.ts"],
-      "@hiko/frontend-feature-dashboard": ["libs/frontend/feature-dashboard/src/index.ts"]
+      "@hiko/frontend-feature-dashboard": ["libs/frontend/feature-dashboard/src/index.ts"],
+      "@hiko/frontend-feature-forecast": ["libs/frontend/feature-forecast/src/index.ts"],
+      "@hiko/frontend-feature-status": ["libs/frontend/feature-status/src/index.ts"],
+      "@hiko/frontend-feature-wallbox": ["libs/frontend/feature-wallbox/src/index.ts"],
+      "@hiko/shared-ui": ["libs/shared/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

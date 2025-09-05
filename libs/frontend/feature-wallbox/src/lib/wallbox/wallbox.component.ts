@@ -1,11 +1,11 @@
 import { Component, computed, effect, inject, OnDestroy } from '@angular/core';
 import { WallboxService } from './wallbox.service';
 import { DecimalPipe } from '@angular/common';
-import { HoursPipe } from '../../core/hours-pipe';
+import { HoursPipe } from '@hiko/shared-ui';
 import { DashboardService } from '@hiko/frontend-feature-dashboard';
 
 @Component({
-  selector: 'app-wallbox',
+  selector: 'lib-wallbox',
   imports: [DecimalPipe, HoursPipe],
   templateUrl: './wallbox.component.html',
   styleUrl: './wallbox.component.scss',
@@ -57,14 +57,14 @@ export class WallboxComponent implements OnDestroy {
   private startAutoRefresh(): void {
     if (!this.autoRefreshInterval) {
       console.log('wallbox starting auto-refresh...');
-      this.autoRefreshInterval = setInterval(() => this.refresh(), 60000);
+      this.autoRefreshInterval = window.setInterval(() => this.refresh(), 60000);
     }
   }
 
   private stopAutoRefresh(): void {
     if (this.autoRefreshInterval) {
       console.log('wallbox stopping auto-refresh...');
-      clearInterval(this.autoRefreshInterval);
+      window.clearInterval(this.autoRefreshInterval);
       this.autoRefreshInterval = undefined;
     }
   }

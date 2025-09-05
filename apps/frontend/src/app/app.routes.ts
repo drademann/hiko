@@ -14,15 +14,15 @@ export const appRoutes: Route[] = [
       { path: '', pathMatch: 'full', redirectTo: 'status' },
       {
         path: 'forecast',
-        loadComponent: () => import('./features/forecast/forecast.component').then((m) => m.ForecastComponent),
+        loadComponent: () => import('@hiko/frontend-feature-forecast').then((m) => m.ForecastComponent),
       },
       {
         path: 'status',
-        loadComponent: () => import('./features/status/status.component').then((m) => m.StatusComponent),
+        loadComponent: () => import('@hiko/frontend-feature-status').then((m) => m.StatusComponent),
       },
       {
         path: 'wallbox',
-        loadComponent: () => import('./features/wallbox/wallbox.component').then((m) => m.WallboxComponent),
+        loadComponent: () => import('@hiko/frontend-feature-wallbox').then((m) => m.WallboxComponent),
       },
     ],
   },
