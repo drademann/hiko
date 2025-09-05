@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardComponent } from '@hiko/frontend-feature-dashboard';
 
 export const appRoutes: Route[] = [
   {

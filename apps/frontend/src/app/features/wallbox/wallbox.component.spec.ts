@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { WallboxComponent } from './wallbox.component';
 import { WallboxService } from './wallbox.service';
-import { DashboardService, RefreshEvent } from '../../dashboard/dashboard.service';
+import { DashboardService, RefreshEvent } from '@hiko/frontend-feature-dashboard';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { signal } from '@angular/core';

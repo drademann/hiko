@@ -6,7 +6,7 @@ import { MatIcon } from '@angular/material/icon';
 import { DashboardService } from './dashboard.service';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'lib-dashboard',
   imports: [RouterOutlet, RouterLink, RouterLinkActive, MatTabNav, MatTabLink, MatTabNavPanel, MatFabButton, MatIcon],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',

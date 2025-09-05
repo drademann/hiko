@@ -19,7 +19,8 @@
     "paths": {
       "@hiko/api": ["libs/shared/api/src/index.ts"],
       "@hiko/backend-feature-wallbox": ["libs/backend/feature-wallbox/src/index.ts"],
-      "@hiko/backend-middleware": ["libs/backend/middleware/src/index.ts"]
+      "@hiko/backend-middleware": ["libs/backend/middleware/src/index.ts"],
+      "@hiko/frontend-feature-dashboard": ["libs/frontend/feature-dashboard/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,5 +1,5 @@
-import { Component, inject, effect } from '@angular/core';
-import { DashboardService } from '../../dashboard/dashboard.service';
+import { Component, effect, inject } from '@angular/core';
+import { DashboardService } from '@hiko/frontend-feature-dashboard';
 
 @Component({
   selector: 'app-status',

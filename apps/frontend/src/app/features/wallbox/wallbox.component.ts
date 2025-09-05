@@ -2,7 +2,7 @@ import { Component, computed, effect, inject, OnDestroy } from '@angular/core';
 import { WallboxService } from './wallbox.service';
 import { DecimalPipe } from '@angular/common';
 import { HoursPipe } from '../../core/hours-pipe';
-import { DashboardService } from '../../dashboard/dashboard.service';
+import { DashboardService } from '@hiko/frontend-feature-dashboard';
 
 @Component({
   selector: 'app-wallbox',
