@@ -66,8 +66,6 @@ case "$1" in
     ;;
     
   stats)
-    echo "Registry Statistics:"
-    echo "==================="
     REPOS=$(curl -s "$REGISTRY_URL/v2/_catalog" | jq -r '.repositories[]' 2>/dev/null)
     if [ -z "$REPOS" ]; then
       echo "No repositories found"
