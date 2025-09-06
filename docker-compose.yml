@@ -9,3 +9,20 @@ services:
       - NODE_ENV=production
       - LOG_LEVEL=info
       - WALLBOX_HOST=${WALLBOX_HOST}
+    networks:
+      - hiko-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ops/docker/Dockerfile.frontend
+    ports:
+      - '80:80'
+    depends_on:
+      - backend
+    networks:
+      - hiko-network
+
+networks:
+  hiko-network:
+    driver: bridge
