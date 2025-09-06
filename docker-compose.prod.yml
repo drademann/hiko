@@ -1,0 +1,26 @@
+services:
+  backend:
+    image: ${REGISTRY_HOST:-localhost}:5001/hiko-backend:latest
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+      - WALLBOX_HOST=${WALLBOX_HOST}
+    networks:
+      - hiko-network
+    restart: unless-stopped
+
+  frontend:
+    image: ${REGISTRY_HOST:-localhost}:5001/hiko-frontend:latest
+    ports:
+      - '80:80'
+    depends_on:
+      - backend
+    networks:
+      - hiko-network
+    restart: unless-stopped
+
+networks:
+  hiko-network:
+    driver: bridge
