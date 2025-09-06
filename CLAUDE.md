@@ -4,7 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Hiko is an Nx monorepo containing a full-stack application for PV forecasts and monitoring wallbox/charging station data. The project uses Angular 20 for the frontend, Express with TypeScript for the backend, and shares types through common libraries.
+Hiko is an Nx monorepo containing a full-stack application for PV forecasts and monitoring wallbox/charging station data. 
+The project uses Angular 20 for the frontend, Express with TypeScript for the backend, and shares types through common libraries.
+Target system is a Raspberry Pi 5 with Touch Display 2 attached running in Kiosk mode. 
+The resolution of the display is 1280x720.
 
 ## Architecture
 
@@ -123,7 +126,7 @@ Each library follows Nx conventions with:
 ## Environment Configuration
 
 - Backend configuration via environment variables:
-  - `BACKEND_HOST` (default: localhost)
+  - `BACKEND_HOST` (default: 0.0.0.0)
   - `BACKEND_PORT` (default: 3000)
 - Frontend proxy configured in `proxy.conf.json` for development
 
