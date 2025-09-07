@@ -6,8 +6,23 @@
 @use '@angular/material' as mat;
 
 html {
-  // explicit root font size for consistent rem calculations
-  font-size: 16px; // 1rem = 16px across all devices
+  // responsive root font size for better scaling
+  font-size: 16px; // Default: 1rem = 16px
+  
+  // tablet devices
+  @media (max-width: 1023px) {
+    font-size: 15px; // Slightly smaller base for tablets
+  }
+  
+  // mobile devices
+  @media (max-width: 767px) {
+    font-size: 14px; // Smaller base for mobile devices
+  }
+  
+  // large screens/Pi display
+  @media (min-width: 1280px) {
+    font-size: 16px; // Maintain full size for Pi display
+  }
   
   @include mat.theme(
     (
@@ -48,4 +63,63 @@ body {
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+// Responsive container utilities
+.container {
+  width: 100%;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  margin-right: auto;
+  margin-left: auto;
+  
+  // Mobile
+  @media (max-width: 767px) {
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+  }
+  
+  // Tablet
+  @media (min-width: 768px) {
+    max-width: 750px;
+  }
+  
+  // Desktop
+  @media (min-width: 1024px) {
+    max-width: 970px;
+  }
+  
+  // Pi Display / Large screens
+  @media (min-width: 1280px) {
+    max-width: 1200px;
+  }
+}
+
+// Ensure tab navigation is responsive
+mat-tab-nav-bar {
+  @media (max-width: 767px) {
+    .mat-mdc-tab {
+      min-width: 0;
+      padding: 0 12px;
+      font-size: 0.875rem;
+    }
+  }
+}
+
+// Responsive typography utilities
+.text-responsive {
+  @media (max-width: 767px) {
+    font-size: 0.875rem;
+  }
+  
+  @media (min-width: 768px) and (max-width: 1023px) {
+    font-size: 0.938rem;
+  }
+}
+
+// Ensure proper viewport handling
+app-root {
+  display: block;
+  min-height: 100vh;
+  position: relative;
 }

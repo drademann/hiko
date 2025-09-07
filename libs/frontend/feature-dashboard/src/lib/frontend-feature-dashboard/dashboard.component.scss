@@ -1,6 +1,23 @@
+@use '../imports' as bp;
+
 button {
   position: fixed;
+  z-index: 1000;
+  
+  // Desktop/Pi display positioning
   bottom: 16px;
   right: 16px;
-  z-index: 1000;
+  
+  // Adjust for smaller screens
+  @include bp.mobile-and-tablet {
+    bottom: 12px;
+    right: 12px;
+    transform: scale(0.9); // Slightly smaller on mobile/tablet
+  }
+  
+  @include bp.mobile {
+    bottom: 10px;
+    right: 10px;
+    transform: scale(0.85); // Even smaller on mobile
+  }
 }
