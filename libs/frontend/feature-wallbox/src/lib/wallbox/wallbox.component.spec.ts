@@ -104,16 +104,11 @@ describe('WallboxComponent', () => {
 
   describe('refresh functionality', () => {
     it('should call wallboxService.refresh when refresh method is called', () => {
-      jest.spyOn(console, 'log').mockImplementation();
-
       component.refresh();
-
-      expect(console.log).toHaveBeenCalledWith('wallbox refreshing data...');
       expect(wallboxService.refresh).toHaveBeenCalled();
     });
 
     it('should refresh when dashboard service triggers wallbox refresh', () => {
-      jest.spyOn(console, 'log').mockImplementation();
       jest.spyOn(component, 'refresh').mockImplementation();
 
       // simulate a dashboard refresh event for wallbox route

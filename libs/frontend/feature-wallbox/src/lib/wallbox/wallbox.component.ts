@@ -50,20 +50,17 @@ export class WallboxComponent implements OnDestroy {
   }
 
   refresh(): void {
-    console.log('wallbox refreshing data...');
     this.wallboxService.refresh();
   }
 
   private startAutoRefresh(): void {
     if (!this.autoRefreshInterval) {
-      console.log('wallbox starting auto-refresh...');
       this.autoRefreshInterval = window.setInterval(() => this.refresh(), 60000);
     }
   }
 
   private stopAutoRefresh(): void {
     if (this.autoRefreshInterval) {
-      console.log('wallbox stopping auto-refresh...');
       window.clearInterval(this.autoRefreshInterval);
       this.autoRefreshInterval = undefined;
     }
