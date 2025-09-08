@@ -6,8 +6,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Hiko is an Nx monorepo containing a full-stack application for PV forecasts and monitoring wallbox/charging station data. 
 The project uses Angular 20 for the frontend, Express with TypeScript for the backend, and shares types through common libraries.
-Target system is a Raspberry Pi 5 with Touch Display 2 attached running in Kiosk mode. 
-The resolution of the display is 1280x720.
+The application is deployed on a Raspberry Pi 5 with 4 GB RAM, in a Docker environment. 
+Display targets are:
+
+- Raspberry Touch Display 2 running the app in Chromium in Kiosk mode (resolution 1280x720).
+- Mobile devices in portrait or landscape mode (e.g., iPhone 13 Pro Max).
+- Any other device like Desktop or Tablet browsers.
 
 ## Architecture
 
@@ -15,21 +19,21 @@ The project follows a library-based architecture within an Nx monorepo, organize
 
 ### Apps (Orchestration Layer)
 - **apps/frontend/**: Angular 20 application using standalone components
-- **apps/backend/**: Minimal Express.js bootstrap that wires together backend libraries
+- **apps/backend/**: Express.js application that wires together backend libraries (uses esbuild with CommonJS format)
 
 ### Libraries (Business Logic)
 
-#### Shared Libraries
+#### Shared Libraries (Non-buildable)
 - **libs/shared/api/**: Shared TypeScript types and interfaces (DTOs, models)
 - **libs/shared/ui/**: Reusable UI components and pipes (e.g., hours-pipe)
 
-#### Frontend Feature Libraries
+#### Frontend Feature Libraries (Non-buildable)
 - **libs/frontend/feature-dashboard/**: Dashboard feature module
 - **libs/frontend/feature-forecast/**: PV forecast feature module
 - **libs/frontend/feature-status/**: Status monitoring feature module
 - **libs/frontend/feature-wallbox/**: Wallbox monitoring feature module with service integration
 
-#### Backend Libraries
+#### Backend Libraries (Buildable with @nx/js:tsc)
 - **libs/backend/feature-wallbox/**: Wallbox domain logic (routes, services, repositories)
 - **libs/backend/middleware/**: Shared backend services (logging, middleware)
 
@@ -39,7 +43,8 @@ The project follows a library-based architecture within an Nx monorepo, organize
 - **Feature Modules**: Both frontend and backend organize code by features
 - **Standalone Components**: Frontend uses Angular 20 standalone components
 - **Dependency Injection**: Backend uses TypeDI container for service management
-- **Proxy Configuration**: Frontend proxies `/api` requests to backend during development
+- **Proxy Configuration**: Frontend proxies `/api` requests to backend during development (apps/frontend/proxy.conf.json)
+- **Module Format**: Backend uses CommonJS format (not ESM) for compatibility with TypeDI decorators
 
 ## Development Commands
 
@@ -64,8 +69,8 @@ npx nx serve frontend
 # Start backend dev server
 npx nx serve backend
 
-# Run both concurrently
-npx nx run-many --target=serve --parallel
+# Run both concurrently with development configuration
+npx nx run-many --targets=serve --projects=backend,frontend -c development
 ```
 
 ### Testing
@@ -85,7 +90,7 @@ npx nx test frontend --codeCoverage
 npx nx test frontend --configuration=ci
 ```
 
-### Linting
+### Code Quality
 ```bash
 # Lint all projects
 npx nx run-many --target=lint
@@ -93,6 +98,15 @@ npx nx run-many --target=lint
 # Lint specific project
 npx nx lint frontend
 npx nx lint frontend-feature-dashboard
+
+# Run lint and fix issues
+npx nx lint frontend --fix
+
+# Format code with Prettier
+npx prettier --write .
+
+# Check formatting
+npx prettier --check .
 ```
 
 ### Single Test Execution
@@ -102,6 +116,31 @@ npx nx test frontend --testPathPattern=wallbox.component.spec.ts
 
 # Run tests matching pattern
 npx nx test backend --testNamePattern="WallboxService"
+
+# Run tests in watch mode
+npx nx test frontend --watch
+
+# Run a single test suite
+npx nx test frontend --testFile=src/app/components/wallbox/wallbox.component.spec.ts
+```
+
+### Nx Utilities
+```bash
+# Show project graph
+npx nx graph
+
+# Show affected projects
+npx nx affected:graph
+
+# List all projects
+npx nx list
+
+# Reset Nx cache
+npx nx reset
+
+# Run command for affected projects only
+npx nx affected --target=test
+npx nx affected --target=build
 ```
 
 ## Project Structure
@@ -125,10 +164,23 @@ Each library follows Nx conventions with:
 
 ## Environment Configuration
 
-- Backend configuration via environment variables:
-  - `BACKEND_HOST` (default: 0.0.0.0)
-  - `BACKEND_PORT` (default: 3000)
-- Frontend proxy configured in `proxy.conf.json` for development
+### Development Environment (.env file)
+```bash
+# Server configuration
+BACKEND_HOST=localhost        # Host for backend server
+BACKEND_PORT=3000             # Port for backend server
+
+# Environment
+NODE_ENV=development          # development | production
+LOG_LEVEL=debug               # debug | info | warn | error
+
+# Wallbox
+WALLBOX_HOST=xxx.xxx.xxx.xxx  # IP address of wallbox device
+```
+
+### Frontend Proxy
+- Frontend proxy configured in `apps/frontend/proxy.conf.json` for development
+- Routes `/api` requests to `http://localhost:3000`
 
 ## TypeScript Path Mappings
 
@@ -171,3 +223,13 @@ The project uses Nx's dependency graph to ensure correct build order:
 - **Build**: Nx 21, esbuild (backend), Angular CLI (frontend)
 - **Testing**: Jest 30, Angular testing utilities
 - **Code Quality**: ESLint with Nx plugin, Prettier
+- **Deployment**: Docker multi-platform builds (amd64/arm64), Docker Compose, Nginx
+
+## Deployment
+
+The application is deployed to Raspberry Pi using Docker:
+- Multi-platform images built with buildx
+- Local Docker registry for image distribution
+- See `ops/DEPLOYMENT.md` for detailed deployment instructions
+- Production compose file: `docker-compose.prod.yml`
+- Build script: `ops/scripts/build-and-push.sh`
