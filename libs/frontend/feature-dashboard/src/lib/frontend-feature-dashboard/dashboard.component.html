@@ -1,15 +1,19 @@
-<div class="select-buttons-container">
-  <button matFab [routerLink]="['status']">
-    <mat-icon>home</mat-icon>
-  </button>
-  <button matFab [routerLink]="['forecast']">
-    <mat-icon>solar_power</mat-icon>
-  </button>
-  <button matFab [routerLink]="['wallbox']">
-    <mat-icon>electric_car</mat-icon>
-  </button>
+<div class="dashboard-container">
+  <div class="select-buttons-container">
+    <button matFab [routerLink]="['status']">
+      <mat-icon>home</mat-icon>
+    </button>
+    <button matFab [routerLink]="['forecast']">
+      <mat-icon>solar_power</mat-icon>
+    </button>
+    <button matFab [routerLink]="['wallbox']">
+      <mat-icon>electric_car</mat-icon>
+    </button>
+  </div>
+  <div class="content-area">
+    <router-outlet></router-outlet>
+  </div>
 </div>
 <button matFab (click)="refresh()" class="refresh-button">
   <mat-icon>refresh</mat-icon>
 </button>
-<router-outlet></router-outlet>
