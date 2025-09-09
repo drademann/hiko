@@ -1,23 +1,37 @@
 @use '../imports' as bp;
 
-button {
+.refresh-button {
   position: fixed;
   z-index: 1000;
-  
-  // Desktop/Pi display positioning
-  bottom: 16px;
-  right: 16px;
-  
-  // Adjust for smaller screens
+
+  bottom: 1rem;
+  right: 1rem;
+
   @include bp.mobile-and-tablet {
-    bottom: 12px;
-    right: 12px;
-    transform: scale(0.9); // Slightly smaller on mobile/tablet
+    transform: scale(0.9);
   }
-  
+
   @include bp.mobile {
-    bottom: 10px;
-    right: 10px;
-    transform: scale(0.85); // Even smaller on mobile
+    transform: scale(0.85);
+  }
+}
+
+.select-buttons-container {
+  position: fixed;
+  z-index: 1000;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  top: 1rem;
+  left: 1rem;
+
+  @include bp.mobile-and-tablet {
+    transform: scale(0.9);
+  }
+
+  @include bp.mobile {
+    transform: scale(0.85);
   }
 }

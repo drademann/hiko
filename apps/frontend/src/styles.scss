@@ -5,35 +5,51 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
+// Include the core styles for Angular Material. This should be done once per app.
+@include mat.core();
+
+// Define the Material theme
+$theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: (
+      plain-family: Roboto,
+      brand-family: Roboto,
+      bold-weight: 700,
+      medium-weight: 500,
+      regular-weight: 400,
+    ),
+    density: (
+      scale: 0,
+    ),
+  )
+);
+
+// Apply the theme to all Angular Material components
+@include mat.all-component-themes($theme);
+
 html {
   // responsive root font size for better scaling
   font-size: 16px; // Default: 1rem = 16px
-  
+
   // tablet devices
   @media (max-width: 1023px) {
     font-size: 15px; // Slightly smaller base for tablets
   }
-  
+
   // mobile devices
   @media (max-width: 767px) {
     font-size: 14px; // Smaller base for mobile devices
   }
-  
+
   // large screens/Pi display
   @media (min-width: 1280px) {
     font-size: 16px; // Maintain full size for Pi display
   }
-  
-  @include mat.theme(
-    (
-      color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    )
-  );
 }
 
 body {
@@ -65,61 +81,48 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
-// Responsive container utilities
-.container {
-  width: 100%;
-  padding-right: 1rem;
-  padding-left: 1rem;
-  margin-right: auto;
-  margin-left: auto;
-  
-  // Mobile
-  @media (max-width: 767px) {
-    padding-right: 0.75rem;
-    padding-left: 0.75rem;
-  }
-  
-  // Tablet
-  @media (min-width: 768px) {
-    max-width: 750px;
-  }
-  
-  // Desktop
-  @media (min-width: 1024px) {
-    max-width: 970px;
-  }
-  
-  // Pi Display / Large screens
-  @media (min-width: 1280px) {
-    max-width: 1200px;
-  }
-}
-
-// Ensure tab navigation is responsive
-mat-tab-nav-bar {
-  @media (max-width: 767px) {
-    .mat-mdc-tab {
-      min-width: 0;
-      padding: 0 12px;
-      font-size: 0.875rem;
-    }
-  }
-}
-
-// Responsive typography utilities
+// responsive typography utilities
 .text-responsive {
   @media (max-width: 767px) {
     font-size: 0.875rem;
   }
-  
+
   @media (min-width: 768px) and (max-width: 1023px) {
     font-size: 0.938rem;
   }
 }
 
-// Ensure proper viewport handling
+// ensure proper viewport handling
 app-root {
   display: block;
   min-height: 100vh;
   position: relative;
+}
+
+// configure mat-icon to use Material Symbols Rounded
+.mat-icon,
+.mat-mdc-fab .mat-icon,
+.mat-mdc-mini-fab .mat-icon {
+  font-family: 'Material Symbols Rounded', monospace;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'liga';
+
+  // Ensure the symbols are not filled by default (outline style)
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
 }
