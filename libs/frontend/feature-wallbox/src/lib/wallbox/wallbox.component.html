@@ -1,20 +1,42 @@
-<div class="wallbox-grid">
-  <div class="status">
-    <p>{{ status() }}</p>
+<div class="wallbox-container">
+  <div class="status-section">
+    <div class="status-card">
+      <p class="status-text">{{ status() }}</p>
+    </div>
   </div>
-  <div class="cell">
-    <p class="value">{{ wallboxState()?.power?.value | number: '1.1-1' }} kW</p>
-    <p class="label">aktuelle</p>
-    <p class="label">Leistung</p>
-  </div>
-  <div class="cell">
-    <p class="value">{{ wallboxState()?.charged?.value | number: '1.1-1' }} kWh</p>
-    <p class="label">bisher</p>
-    <p class="label">geladen</p>
-  </div>
-  <div class="cell">
-    <p class="value">{{ wallboxState()?.duration?.value | hours }}</p>
-    <p class="label">Ladezeit</p>
-    <p class="label">bisher</p>
+
+  <div class="metrics-grid">
+    <div class="metric-card power-card">
+      <div class="metric-content">
+        <div class="metric-value">{{ wallboxState()?.power?.value | number: '1.1-1' }}</div>
+        <div class="metric-unit">kW</div>
+        <div class="metric-label">
+          <span>aktuelle</span>
+          <span>Leistung</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="metric-card energy-card">
+      <div class="metric-content">
+        <div class="metric-value">{{ wallboxState()?.charged?.value | number: '1.1-1' }}</div>
+        <div class="metric-unit">kWh</div>
+        <div class="metric-label">
+          <span>bisher</span>
+          <span>geladen</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="metric-card duration-card">
+      <div class="metric-content">
+        <div class="metric-value">{{ wallboxState()?.duration?.value | hours }}</div>
+        <div class="metric-unit">Std.</div>
+        <div class="metric-label">
+          <span>Ladezeit</span>
+          <span>bisher</span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

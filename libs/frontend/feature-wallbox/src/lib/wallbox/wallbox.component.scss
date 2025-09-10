@@ -1,97 +1,158 @@
 @use '../imports' as bp;
 
-.wallbox-grid {
+.wallbox-container {
   color: #19448a;
-  display: grid;
-  gap: 0;
-  min-height: 340px;
   padding: 1rem;
+  min-height: 340px;
+
+  @include bp.mobile-portrait {
+    padding: 1rem 0.5rem;
+    min-height: auto;
+  }
+}
+
+.status-section {
+  margin-bottom: 2rem;
+
+  @include bp.mobile-portrait {
+    margin-bottom: 1.5rem;
+  }
+
+  .status-card {
+    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    text-align: center;
+    box-shadow:
+      0 2px 8px rgba(25, 68, 138, 0.12),
+      0 1px 3px rgba(25, 68, 138, 0.08);
+
+    @include bp.mobile-portrait {
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+    }
+
+    .status-text {
+      color: white;
+      font-weight: 600;
+      margin: 0;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      @include bp.responsive-font(2.5rem, 2rem, 1.6rem);
+    }
+  }
+}
+
+.metrics-grid {
+  display: grid;
+  gap: 1.5rem;
 
   // Desktop/Pi Display (landscape)
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 140px 200px;
+  grid-template-columns: repeat(3, 1fr);
 
   // Tablet and mobile landscape
   @include bp.mobile-and-tablet {
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: auto auto;
-    min-height: auto;
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
   }
 
   // Mobile portrait
   @include bp.mobile-portrait {
     grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    gap: 1.5rem;
-    padding: 1rem 0.5rem;
+    gap: 1rem;
+  }
+}
+
+.metric-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow:
+    0 2px 8px rgba(25, 68, 138, 0.08),
+    0 1px 3px rgba(25, 68, 138, 0.04);
+  border: 1px solid rgba(25, 68, 138, 0.08);
+  position: relative;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  @include bp.mobile-portrait {
+    padding: 1.25rem;
+    border-radius: 12px;
+    min-height: 140px;
   }
 
-  .status {
-    grid-column: span 3;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    border-radius: 16px 16px 0 0;
 
     @include bp.mobile-portrait {
-      grid-column: span 1;
-      padding: 0.5rem;
-    }
-
-    p {
-      font-weight: bold;
-      text-align: center;
-      @include bp.responsive-font(3rem, 2.5rem, 2rem);
+      border-radius: 12px 12px 0 0;
     }
   }
 
-  .cell {
-    display: flex;
-    flex-direction: column;
+  &.power-card::before {
+    background: linear-gradient(90deg, #ff9800, #f57c00);
+  }
+
+  &.energy-card::before {
+    background: linear-gradient(90deg, #4caf50, #388e3c);
+  }
+
+  &.duration-card::before {
+    background: linear-gradient(90deg, #9c27b0, #7b1fa2);
+  }
+}
+
+.metric-content {
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.metric-value {
+  font-weight: 700;
+  color: #1565c0;
+  margin-bottom: 0.25rem;
+  line-height: 1.1;
+  @include bp.responsive-font(2.8rem, 2.4rem, 2rem);
+}
+
+.metric-unit {
+  font-weight: 600;
+  color: #1976d2;
+  margin-bottom: 0.75rem;
+  opacity: 0.8;
+  @include bp.responsive-font(1.4rem, 1.2rem, 1rem);
+}
+
+.metric-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+
+  @include bp.mobile-portrait {
+    flex-direction: row;
+    gap: 0.25rem;
     justify-content: center;
-    align-items: center;
-    padding: 1rem;
+  }
+
+  span {
+    font-weight: 500;
+    color: #424242;
+    opacity: 0.9;
+    @include bp.responsive-font(1.1rem, 1rem, 0.9rem);
 
     @include bp.mobile-portrait {
-      padding: 0.5rem;
-      border-bottom: 1px solid rgba(25, 68, 138, 0.1);
-
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-
-    p {
-      font-weight: bold;
-      margin: 20px;
-      text-align: center;
-
-      @include bp.mobile-and-tablet {
-        margin: 10px;
-      }
-
-      @include bp.mobile {
-        margin: 5px;
-      }
-    }
-
-    .value {
-      @include bp.responsive-font(3rem, 2.5rem, 2rem);
-      @include bp.responsive-spacing(padding-bottom, 20px, 15px, 10px);
-    }
-
-    .label {
-      @include bp.responsive-font(1.7rem, 1.3rem, 1rem);
-      @include bp.responsive-spacing(margin, 7px, 5px, 3px);
-
-      @include bp.mobile-portrait {
-        // Combine labels on one line for mobile portrait
-        display: inline;
-
-        &:first-of-type::after {
-          content: ' ';
-        }
+      &:first-child::after {
+        content: ' ';
       }
     }
   }
