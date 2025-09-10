@@ -7,7 +7,7 @@ services:
     volumes:
       - registry-data:/var/lib/registry
       - ./registry-config.yml:/etc/docker/registry/config.yml:ro
-    restart: unless-stopped
+    restart: always
     environment:
       REGISTRY_STORAGE_DELETE_ENABLED: 'true'
       REGISTRY_HTTP_ADDR: 0.0.0.0:5000
