@@ -19,7 +19,6 @@
   }
 
   .status-card {
-    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
     border-radius: 16px;
     padding: 1.5rem 2rem;
     text-align: center;
@@ -33,7 +32,7 @@
     }
 
     .status-text {
-      color: white;
+      color: #1976d2;
       font-weight: 600;
       margin: 0;
       text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
@@ -65,13 +64,13 @@
 .metric-card {
   background: white;
   border-radius: 16px;
-  padding: 1.5rem;
+  padding: 1rem;
   box-shadow:
     0 2px 8px rgba(25, 68, 138, 0.08),
     0 1px 3px rgba(25, 68, 138, 0.04);
   border: 1px solid rgba(25, 68, 138, 0.08);
   position: relative;
-  min-height: 180px;
+  min-height: 120px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -80,32 +79,6 @@
     padding: 1.25rem;
     border-radius: 12px;
     min-height: 140px;
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 20px;
-    border-radius: 16px 16px 0 0;
-
-    @include bp.mobile-portrait {
-      border-radius: 12px 12px 0 0;
-    }
-  }
-
-  &.power-card::before {
-    background: linear-gradient(90deg, #ff9800, #f57c00);
-  }
-
-  &.energy-card::before {
-    background: linear-gradient(90deg, #4caf50, #388e3c);
-  }
-
-  &.duration-card::before {
-    background: linear-gradient(90deg, #9c27b0, #7b1fa2);
   }
 }
 
