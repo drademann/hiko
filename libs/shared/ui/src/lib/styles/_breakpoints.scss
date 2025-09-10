@@ -1,6 +1,6 @@
 // Breakpoint definitions
 // Mobile portrait: < 768px (iPhone and similar devices in portrait)
-// Tablet/Mobile landscape: 768px - 1023px 
+// Tablet/Mobile landscape: 768px - 1023px
 // Desktop/Pi display: >= 1024px (includes 1280x720 Pi display)
 
 $breakpoint-mobile: 767px;
@@ -8,7 +8,7 @@ $breakpoint-tablet: 1023px;
 $breakpoint-desktop: 1024px;
 $breakpoint-pi-display: 1280px;
 
-// Responsive mixins
+// responsive mixins
 @mixin mobile {
   @media (max-width: $breakpoint-mobile) {
     @content;
@@ -33,14 +33,14 @@ $breakpoint-pi-display: 1280px;
   }
 }
 
+// specific targeting for Pi display (1280x720)
 @mixin pi-display {
-  // Specific targeting for Pi display (1280x720)
   @media (min-width: $breakpoint-pi-display) and (min-height: 720px) {
     @content;
   }
 }
 
-// Orientation mixins
+// orientation mixins
 @mixin portrait {
   @media (orientation: portrait) {
     @content;
@@ -53,7 +53,7 @@ $breakpoint-pi-display: 1280px;
   }
 }
 
-// Combined breakpoint and orientation
+// combined breakpoint and orientation
 @mixin mobile-portrait {
   @media (max-width: $breakpoint-mobile) and (orientation: portrait) {
     @content;
@@ -66,16 +66,16 @@ $breakpoint-pi-display: 1280px;
   }
 }
 
-// Responsive font sizing helper
+// responsive font sizing helper
 @mixin responsive-font($desktop-size, $tablet-size: null, $mobile-size: null) {
   font-size: $desktop-size;
-  
+
   @if $tablet-size {
     @include tablet {
       font-size: $tablet-size;
     }
   }
-  
+
   @if $mobile-size {
     @include mobile {
       font-size: $mobile-size;
@@ -83,18 +83,18 @@ $breakpoint-pi-display: 1280px;
   }
 }
 
-// Responsive spacing helper
+// responsive spacing helper
 @mixin responsive-spacing($property, $desktop-value, $tablet-value: null, $mobile-value: null) {
   & {
     #{$property}: $desktop-value;
   }
-  
+
   @if $tablet-value {
     @include tablet {
       #{$property}: $tablet-value;
     }
   }
-  
+
   @if $mobile-value {
     @include mobile {
       #{$property}: $mobile-value;
