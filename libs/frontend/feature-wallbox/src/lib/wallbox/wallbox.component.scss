@@ -23,11 +23,11 @@
     }
 
     .status-text {
+      margin: 0;
       color: #1976d2;
       font-weight: 600;
-      margin: 0;
       text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-      @include bp.responsive-font(2.5rem, 2rem, 1.6rem);
+      @include bp.responsive-font(3rem, 2rem, 1.6rem);
     }
   }
 }
@@ -52,12 +52,14 @@
 }
 
 .metric-card {
-  border-radius: 16px;
   position: relative;
   min-height: 120px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  @include bp.portrait {
+    margin-top: 2rem;
+  }
 }
 
 .metric-content {
@@ -69,21 +71,21 @@
 }
 
 .metric-value {
-  font-size: 3rem;
-  font-weight: 700;
-  color: #1565c0;
   margin-bottom: 0.25rem;
-  line-height: 1.1;
+  color: #1565c0;
+  font-weight: 700;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  line-height: 1.1;
+  @include bp.responsive-font(6rem, 6rem, 4rem);
 }
 
 .metric-unit {
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: #1976d2;
   margin-bottom: 0.75rem;
-  opacity: 0.8;
+  color: #1976d2;
+  font-weight: 600;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  opacity: 0.8;
+  @include bp.responsive-font(3rem, 3rem, 2rem);
 }
 
 .metric-label {
@@ -92,10 +94,10 @@
   gap: 0.1rem;
 
   span {
-    font-size: 1.2rem;
-    font-weight: 500;
     color: #424242;
-    opacity: 0.9;
+    font-weight: 500;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
+    @include bp.responsive-font(1.6rem, 1.6rem, 1.6rem);
   }
 }
