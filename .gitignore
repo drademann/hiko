@@ -29,6 +29,7 @@ testem.log
 # local environment
 .env
 *.private.env.json
+**/mockoon/*
 
 # logs
 logs

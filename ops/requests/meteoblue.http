@@ -1,0 +1,48 @@
+## Basic
+GET https://my.meteoblue.com/packages/basic-1h?lat={{lat}}&lon={{lon}}&apikey={{meteoblueApiKey}}
+Content-Type: application/json
+
+### PV Pro SE
+GET https://my.meteoblue.com/packages/pvpro-1h
+    ?lat={{lat}}&lon={{lon}}
+    &asl=40
+    &kwp=1.335
+    &slope=25
+    &facing=142
+    &power_efficiency=0.85
+    &apikey={{meteoblueApiKey}}
+    &tz=Europe%2FBerlin
+    &forecast_days=1
+
+### PV Pro NE
+GET https://my.meteoblue.com/packages/pvpro-1h
+    ?lat={{lat}}&lon={{lon}}
+    &asl=40
+    &kwp=4.45
+    &slope=25
+    &facing=58
+    &power_efficiency=0.85
+    &apikey={{meteoblueApiKey}}
+    &tz=Europe%2FBerlin
+    &forecast_days=1
+
+### PV Pro NW
+GET https://my.meteoblue.com/packages/pvpro-1h
+    ?lat={{lat}}&lon={{lon}}
+    &asl=40
+    &kwp=2.670
+    &slope=25
+    &facing=304
+    &power_efficiency=0.85
+    &apikey={{meteoblueApiKey}}
+    &tz=Europe%2FBerlin
+    &forecast_days=1
+
+### Mockooned SE
+GET http://localhost:4000/packages/pvpro-1h?facing=142
+
+### Mockooned NE
+GET http://localhost:4000/packages/pvpro-1h?facing=58
+
+### Mockooned NW
+GET http://localhost:4000/packages/pvpro-1h?facing=304
