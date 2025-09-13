@@ -23,9 +23,9 @@ The project follows a library-based architecture within an Nx monorepo, organize
 
 ### Libraries (Business Logic)
 
-#### Shared Libraries (Non-buildable)
-- **libs/shared/api/**: Shared TypeScript types and interfaces (DTOs, models)
-- **libs/shared/ui/**: Reusable UI components and pipes (e.g., hours-pipe)
+#### Shared Libraries
+- **libs/shared/api/**: Shared TypeScript types and interfaces (DTOs, models) - Buildable with @nx/esbuild (CommonJS format)
+- **libs/shared/ui/**: Reusable UI components and pipes (e.g., hours-pipe) - Non-buildable
 
 #### Frontend Feature Libraries (Non-buildable)
 - **libs/frontend/feature-dashboard/**: Dashboard feature module
@@ -42,7 +42,9 @@ The project follows a library-based architecture within an Nx monorepo, organize
 - **Nx Workspace**: Monorepo with shared dependencies and build orchestration
 - **Feature Modules**: Both frontend and backend organize code by features
 - **Standalone Components**: Frontend uses Angular 20 standalone components
+- **Functional Architecture**: Backend uses simple functional imports without dependency injection framework
 - **Proxy Configuration**: Frontend proxies `/api` requests to backend during development (apps/frontend/proxy.conf.json)
+- **Module Format**: Backend uses CommonJS format (not ESM) for compatibility
 
 ## Development Commands
 
@@ -218,7 +220,7 @@ The project uses Nx's dependency graph to ensure correct build order:
 
 - **Frontend**: Angular 20, Angular Material, SCSS, RxJS, dayjs
 - **Backend**: Express 4, Winston logging
-- **Build**: Nx 21, esbuild (backend), Angular CLI (frontend)
+- **Build**: Nx 21.5, esbuild (backend), Angular CLI (frontend)
 - **Testing**: Jest 30, Angular testing utilities
 - **Code Quality**: ESLint with Nx plugin, Prettier
 - **Deployment**: Docker multi-platform builds (amd64/arm64), Docker Compose, Nginx
@@ -231,3 +233,12 @@ The application is deployed to Raspberry Pi using Docker:
 - See `ops/DEPLOYMENT.md` for detailed deployment instructions
 - Production compose file: `docker-compose.prod.yml`
 - Build script: `ops/scripts/build-and-push.sh`
+
+# important-instruction-reminders
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
+
+
+      IMPORTANT: this context may or may not be relevant to your tasks. You should not respond to this context unless it is highly relevant to your task.
