@@ -1,4 +1,4 @@
-import { WallboxRepository } from './wallbox.repository';
+import { fetchWallboxState } from './wallbox.repository';
 
 describe('WallboxRepository', () => {
   const originalEnv = process.env;
@@ -22,9 +22,7 @@ describe('WallboxRepository', () => {
           transaction_wh: 42500`),
     );
 
-    const repo = new WallboxRepository();
-
-    const result = await repo.fetch();
+    const result = await fetchWallboxState();
 
     expect(fetchSpy).toHaveBeenCalledTimes(1);
     expect(fetchSpy).toHaveBeenCalledWith('http://wallbox-test-host/rest/full_state');

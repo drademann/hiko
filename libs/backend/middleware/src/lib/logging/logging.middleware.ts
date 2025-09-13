@@ -1,17 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
-import { Container } from 'typedi';
-import { Logger, LoggerToken } from './logger.service';
+import { createLogger } from './logger.service';
 
 export function loggingMiddleware(req: Request, res: Response, next: NextFunction): void {
-  const logger = Container.get<Logger>(LoggerToken);
   const startTime = Date.now();
 
-  const requestLogger = logger.child({
+  const requestLogger = createLogger({
     requestId: generateRequestId(),
     method: req.method,
     url: req.url,
   });
-
   requestLogger.info('request started');
 
   const originalSend = res.send;

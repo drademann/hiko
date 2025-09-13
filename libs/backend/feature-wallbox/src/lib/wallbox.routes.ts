@@ -1,22 +1,17 @@
 import { Router } from 'express';
-import { Container } from 'typedi';
-import { Logger, LoggerToken } from '@hiko/backend-middleware';
-import { WallboxService, WallboxServiceToken } from './wallbox.service';
+import { createLogger } from '@hiko/backend-middleware';
+import { currentWallboxState } from './wallbox.service';
 import { ConnectionState, WallboxState } from './wallbox.model';
 import { Unit, WallboxStateDTO } from '@hiko/api';
 
 const router = Router();
 
 router.get('/state', async (_, res) => {
-  const logger = Container.get<Logger>(LoggerToken).child({ route: '/api/wallbox/state' });
-
+  const log = createLogger({ route: '/api/wallbox/state' });
   try {
-    logger.debug('fetching wallbox state');
-    const service = Container.get<WallboxService>(WallboxServiceToken);
-    const state = await service.currentState();
-    res.json(from(state));
+    res.json(from(await currentWallboxState()));
   } catch (error) {
-    logger.error('failed to fetch wallbox state', {
+    log.error('failed to fetch wallbox state', {
       error: error instanceof Error ? error.message : error,
       stack: error instanceof Error ? error.stack : undefined,
     });

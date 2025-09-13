@@ -1,4 +1,3 @@
-import { Service, Token } from 'typedi';
 import * as winston from 'winston';
 
 type LogMetadata = string | number | boolean | object | null | undefined;
@@ -11,11 +10,14 @@ export interface Logger {
   child(context: { [key: string]: LogMetadata }): Logger;
 }
 
-export const LoggerToken = new Token<Logger>('Logger');
+export function createLogger(context?: { [key: string]: LogMetadata }): Logger {
+  const logger = WinstonLogger.getInstance();
+  return context ? logger.child(context) : logger;
+}
 
-@Service({ id: LoggerToken })
-export class WinstonLogger implements Logger {
-  private winston: winston.Logger;
+class WinstonLogger implements Logger {
+  private static instance: WinstonLogger;
+  private readonly winston: winston.Logger;
 
   constructor() {
     const isDevelopment = process.env['NODE_ENV'] === 'development';
@@ -60,6 +62,13 @@ export class WinstonLogger implements Logger {
         }),
       );
     }
+  }
+
+  public static getInstance(): WinstonLogger {
+    if (!WinstonLogger.instance) {
+      WinstonLogger.instance = new WinstonLogger();
+    }
+    return WinstonLogger.instance;
   }
 
   error(message: string, meta?: LogMetadata): void {

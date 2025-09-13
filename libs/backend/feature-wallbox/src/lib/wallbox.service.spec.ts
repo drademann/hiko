@@ -1,26 +1,22 @@
-import { WallboxRepository, WallboxRepositoryToken } from './wallbox.repository';
-import { WallboxService, WallboxServiceImpl } from './wallbox.service';
 import { ConnectionState, kW, kWh } from './wallbox.model';
-import { Container } from 'typedi';
 import { Duration } from 'dayjs/plugin/duration';
 import dayjs from 'dayjs';
-import { LoggerToken } from '@hiko/backend-middleware';
 import { testWallboxResponseBody } from './wallbox.repository.spec';
+import { currentWallboxState } from './wallbox.service';
+
+const createMockLogger = () => ({
+  error: jest.fn(),
+  warn: jest.fn(),
+  info: jest.fn(),
+  debug: jest.fn(),
+  child: jest.fn(),
+});
 
 describe('WallboxService', () => {
-  let service: WallboxService;
-
   beforeEach(() => {
-    const mockedLogger = {
-      child: jest.fn().mockReturnThis(),
-      debug: jest.fn(),
-      info: jest.fn(),
-      warn: jest.fn(),
-      error: jest.fn(),
-    };
-    Container.set(LoggerToken, mockedLogger);
-    Container.set(WallboxRepositoryToken, new WallboxRepository());
-    service = new WallboxServiceImpl();
+    jest.mock('@hiko/backend-middleware', () => ({
+      createLogger: jest.fn(() => createMockLogger()),
+    }));
   });
 
   test.each([
@@ -31,7 +27,7 @@ describe('WallboxService', () => {
     const body = testWallboxResponseBody({ conn_state: connStateResponse });
     jest.spyOn(global, 'fetch').mockResolvedValue(new Response(body));
 
-    const state = await service.currentState();
+    const state = await currentWallboxState();
 
     expect(state.connectionState).toBe(expectedState);
   });
@@ -39,7 +35,7 @@ describe('WallboxService', () => {
   it('should map power to kW', async () => {
     jest.spyOn(global, 'fetch').mockResolvedValue(new Response(testWallboxResponseBody({ power_w: '7200' })));
 
-    const state = await service.currentState();
+    const state = await currentWallboxState();
 
     const expectedPower = 7.2 as kW;
     expect(state.power).toBe(expectedPower);
@@ -50,7 +46,7 @@ describe('WallboxService', () => {
       .spyOn(global, 'fetch')
       .mockResolvedValue(new Response(testWallboxResponseBody({ time_since_charging_start: '390' })));
 
-    const state = await service.currentState();
+    const state = await currentWallboxState();
 
     const expectedDuration: Duration = dayjs.duration(390, 'seconds');
     expect(state.duration).toEqual(expectedDuration);
@@ -59,7 +55,7 @@ describe('WallboxService', () => {
   it('should map charged energy', async () => {
     jest.spyOn(global, 'fetch').mockResolvedValue(new Response(testWallboxResponseBody({ transaction_wh: '42500' })));
 
-    const state = await service.currentState();
+    const state = await currentWallboxState();
 
     const expectedCharged = 42.5 as kWh;
     expect(state.charged).toBe(expectedCharged);
@@ -68,6 +64,5 @@ describe('WallboxService', () => {
   afterEach(() => {
     jest.restoreAllMocks();
     jest.clearAllMocks();
-    Container.reset();
   });
 });

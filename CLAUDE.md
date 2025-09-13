@@ -42,9 +42,7 @@ The project follows a library-based architecture within an Nx monorepo, organize
 - **Nx Workspace**: Monorepo with shared dependencies and build orchestration
 - **Feature Modules**: Both frontend and backend organize code by features
 - **Standalone Components**: Frontend uses Angular 20 standalone components
-- **Dependency Injection**: Backend uses TypeDI container for service management
 - **Proxy Configuration**: Frontend proxies `/api` requests to backend during development (apps/frontend/proxy.conf.json)
-- **Module Format**: Backend uses CommonJS format (not ESM) for compatibility with TypeDI decorators
 
 ## Development Commands
 
@@ -219,7 +217,7 @@ The project uses Nx's dependency graph to ensure correct build order:
 ## Key Technologies
 
 - **Frontend**: Angular 20, Angular Material, SCSS, RxJS, dayjs
-- **Backend**: Express 4, TypeDI, Winston logging, reflect-metadata
+- **Backend**: Express 4, Winston logging
 - **Build**: Nx 21, esbuild (backend), Angular CLI (frontend)
 - **Testing**: Jest 30, Angular testing utilities
 - **Code Quality**: ESLint with Nx plugin, Prettier
