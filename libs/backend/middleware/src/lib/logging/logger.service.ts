@@ -18,10 +18,10 @@ export class WinstonLogger implements Logger {
   private winston: winston.Logger;
 
   constructor() {
-    const isDevelopment = process.env.NODE_ENV === 'development';
+    const isDevelopment = process.env['NODE_ENV'] === 'development';
 
     this.winston = winston.createLogger({
-      level: process.env.LOG_LEVEL || (isDevelopment ? 'debug' : 'info'),
+      level: process.env['LOG_LEVEL'] || (isDevelopment ? 'debug' : 'info'),
       format: winston.format.combine(
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         winston.format.errors({ stack: true }),

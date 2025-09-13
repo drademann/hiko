@@ -36,3 +36,17 @@ describe('WallboxRepository', () => {
     expect(result.get('transaction_wh')).toBe('42500');
   });
 });
+
+export function testWallboxResponseBody({
+  conn_state = 'no_vehicle_connected',
+  power_w = '7200',
+  time_since_charging_start = '390',
+  transaction_wh = '42500',
+} = {}): string {
+  return `
+    conn_state:${conn_state}
+    power_w:${power_w}
+    time_since_charging_start:${time_since_charging_start}
+    transaction_wh:${transaction_wh}
+  `;
+}

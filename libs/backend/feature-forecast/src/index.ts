@@ -1,1 +1,1 @@
-export * from './lib/backend-feature-forecast';
+export * from './lib/forecast.model';

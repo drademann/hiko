@@ -18,17 +18,17 @@ export class WallboxServiceImpl implements WallboxService {
   async currentState(): Promise<WallboxState> {
     this.logger.debug('getting current wallbox state');
     const repository = Container.get<WallboxRepository>(WallboxRepositoryToken);
-    const state = await repository.fetch();
+    const rawState = await repository.fetch();
     return {
-      connectionState: this.mapConnState(state.get('conn_state')),
-      power: this.mapPower(state.get('power_w')),
-      charged: this.mapCharged(state.get('transaction_wh')),
-      duration: this.mapDuration(state.get('time_since_charging_start')),
+      connectionState: this.mapConnState(rawState.get('conn_state')),
+      power: this.mapPower(rawState.get('power_w')),
+      charged: this.mapCharged(rawState.get('transaction_wh')),
+      duration: this.mapDuration(rawState.get('time_since_charging_start')),
     };
   }
 
   //region mappings
-  private mapConnState(value: string): ConnectionState {
+  private mapConnState(value: string | undefined): ConnectionState {
     switch (value) {
       case 'no_vehicle_connected':
         return ConnectionState.NoVehicleConnected;
@@ -41,15 +41,24 @@ export class WallboxServiceImpl implements WallboxService {
     }
   }
 
-  private mapPower(value: string): kW {
+  private mapPower(value: string | undefined): kW {
+    if (!value) {
+      throw new Error('power value is undefined');
+    }
     return (parseFloat(value) / 1000.0) as kW;
   }
 
-  private mapCharged(value: string): kWh {
+  private mapCharged(value: string | undefined): kWh {
+    if (!value) {
+      throw new Error('charged value is undefined');
+    }
     return (parseFloat(value) / 1000.0) as kWh;
   }
 
-  private mapDuration(value: string): Duration {
+  private mapDuration(value: string | undefined): Duration {
+    if (!value) {
+      throw new Error('duration value is undefined');
+    }
     return dayjs.duration(parseInt(value), 'seconds');
   }
   //endregion
