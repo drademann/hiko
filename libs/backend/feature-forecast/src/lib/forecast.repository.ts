@@ -6,18 +6,13 @@ export interface PVProBody {
 }
 
 export async function fetchPVPro(facing: number, power: number): Promise<PVProBody> {
-  const lat = Number(process.env['HOME_LAT']);
-  if (isNaN(lat)) {
-    throw new Error('HOME_LAT is not a number');
+  if (facing < 0 || facing >= 360) {
+    throw new Error('facing must be between 0 and 359');
   }
-  const lon = Number(process.env['HOME_LON']);
-  if (isNaN(lon)) {
-    throw new Error('HOME_LON is not a number');
+  if (power <= 0) {
+    throw new Error('power must be greater than 0');
   }
-  const apiKey = process.env['METEOBLUE_API_KEY'];
-  if (!apiKey) {
-    throw new Error('METEOBLUE_API_KEY is not set');
-  }
+  const { lat, lon, apiKey } = PVProConfig();
   // noinspection HttpUrlsUsage
   const meteoblueURL = `
     http://${process.env['METEOBLUE_HOST']}/packages/pvpro-1h \
@@ -31,4 +26,20 @@ export async function fetchPVPro(facing: number, power: number): Promise<PVProBo
   `;
   const res = await fetch(meteoblueURL);
   return await res.json();
+}
+
+function PVProConfig() {
+  const lat = Number(process.env['HOME_LAT']);
+  if (isNaN(lat)) {
+    throw new Error('HOME_LAT is not a number');
+  }
+  const lon = Number(process.env['HOME_LON']);
+  if (isNaN(lon)) {
+    throw new Error('HOME_LON is not a number');
+  }
+  const apiKey = process.env['METEOBLUE_API_KEY'];
+  if (!apiKey) {
+    throw new Error('METEOBLUE_API_KEY is not set');
+  }
+  return { lat, lon, apiKey };
 }
