@@ -48,4 +48,6 @@ Thumbs.db
 .angular
 
 # AI
+AGENTS.md
+CLAUDE.md
 .claude/
