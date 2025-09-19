@@ -2,7 +2,9 @@ export interface PVProBody {
   units: {
     pvpower: string;
   };
-  pvpower_instant: number[];
+  data_1h: {
+    pvpower_instant: number[];
+  };
 }
 
 export async function fetchPVPro(facing: number, power: number): Promise<PVProBody> {
@@ -14,18 +16,37 @@ export async function fetchPVPro(facing: number, power: number): Promise<PVProBo
   }
   const { lat, lon, apiKey } = PVProConfig();
   // noinspection HttpUrlsUsage
-  const meteoblueURL = `
-    http://${process.env['METEOBLUE_HOST']}/packages/pvpro-1h \
-        ?lat=${lat}&lon=${lon}&asl=40 \
-        &facing=${facing}&slope=25 \
-        &power=${power} \
-        &power_efficiency=0.85 \
-        &apikey=${apiKey} \
-        &tz=Europe%2FBerlin \
-        &forecast_days=1
-  `;
+  const meteoblueURL = `http://${process.env['METEOBLUE_HOST']}/packages/pvpro-1h?lat=${lat}&lon=${lon}&asl=40&facing=${facing}&slope=25&kwp=${power}&power_efficiency=0.85&apikey=${apiKey}&tz=Europe%2FBerlin&forecast_days=1`;
   const res = await fetch(meteoblueURL);
-  return await res.json();
+  if (!res.ok) {
+    throw new Error(`failed to fetch PVPro data: ${res.statusText}`);
+  }
+  const payload = await res.json();
+  if (!isPVProBody(payload)) {
+    throw new Error('failed to fetch PVPro data: invalid response shape');
+  }
+  return payload;
+}
+
+function isPVProBody(payload: unknown): payload is PVProBody {
+  if (!payload || typeof payload !== 'object') {
+    return false;
+  }
+  const { units, data_1h } = payload as Record<string, unknown>;
+  if (!units || typeof units !== 'object') {
+    return false;
+  }
+  if (typeof (units as Record<string, unknown>)['pvpower'] !== 'string') {
+    return false;
+  }
+  if (!data_1h || typeof data_1h !== 'object') {
+    return false;
+  }
+  const { pvpower_instant } = data_1h as Record<string, unknown>;
+  if (!Array.isArray(pvpower_instant)) {
+    return false;
+  }
+  return pvpower_instant.every((value) => typeof value === 'number');
 }
 
 function PVProConfig() {

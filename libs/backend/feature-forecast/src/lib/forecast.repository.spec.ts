@@ -49,7 +49,7 @@ describe('fetchPVPro', () => {
   it('calls the meteoblue API with configured parameters and returns the response body', async () => {
     const responseBody: PVProBody = {
       units: { pvpower: 'kW' },
-      pvpower_instant: [1200, 1100, 900],
+      data_1h: { pvpower_instant: [1200, 1100, 900] },
     };
     const fetchSpy = jest.spyOn(global, 'fetch').mockResolvedValue(new Response(JSON.stringify(responseBody)));
 
@@ -61,7 +61,7 @@ describe('fetchPVPro', () => {
     expect(calledUrl).toContain('?lat=50.123&lon=8.678&asl=40');
     expect(calledUrl).toContain('&facing=180');
     expect(calledUrl).toContain('&slope=25');
-    expect(calledUrl).toContain('&power=7');
+    expect(calledUrl).toContain('&kwp=7');
     expect(calledUrl).toContain('&power_efficiency=0.85');
     expect(calledUrl).toContain('&apikey=test-key');
     expect(calledUrl).toContain('&tz=Europe%2FBerlin');

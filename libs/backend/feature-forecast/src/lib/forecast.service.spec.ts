@@ -5,7 +5,7 @@ describe('currentForecast', () => {
   it('should fetch three forecasts, one for each facing and power', async () => {
     jest
       .spyOn(ForecastRepository, 'fetchPVPro')
-      .mockResolvedValue({ units: { pvpower: 'kW' }, pvpower_instant: [100] });
+      .mockResolvedValue({ units: { pvpower: 'kW' }, data_1h: { pvpower_instant: [100] } });
 
     await currentForecast();
 
@@ -18,9 +18,9 @@ describe('currentForecast', () => {
   it('should add up the values of the three forecasts, and return their sums', async () => {
     jest
       .spyOn(ForecastRepository, 'fetchPVPro')
-      .mockResolvedValueOnce({ units: { pvpower: 'kW' }, pvpower_instant: [100, 200, 300] })
-      .mockResolvedValueOnce({ units: { pvpower: 'kW' }, pvpower_instant: [101, 201, 301] })
-      .mockResolvedValueOnce({ units: { pvpower: 'kW' }, pvpower_instant: [102, 202, 302] });
+      .mockResolvedValueOnce({ units: { pvpower: 'kW' }, data_1h: { pvpower_instant: [100, 200, 300] } })
+      .mockResolvedValueOnce({ units: { pvpower: 'kW' }, data_1h: { pvpower_instant: [101, 201, 301] } })
+      .mockResolvedValueOnce({ units: { pvpower: 'kW' }, data_1h: { pvpower_instant: [102, 202, 302] } });
 
     const forecast = await currentForecast();
 

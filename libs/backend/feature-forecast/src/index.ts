@@ -1,1 +1,1 @@
-export * from './lib/forecast.model';
+export { forecastRoutes } from './lib/forecast.routes';

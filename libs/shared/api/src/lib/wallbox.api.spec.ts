@@ -1,4 +1,5 @@
-import { Unit, WallboxStateDTO } from './api';
+import { Unit } from './general.api';
+import { WallboxStateDTO } from './wallbox.api';
 
 describe('api', () => {
   it('should provide types for wallbox', async () => {
