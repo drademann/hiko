@@ -9,6 +9,7 @@ export type WallboxState = {
   power: kW;
   charged: kWh;
   duration: Duration;
+  ambientTemperature: Celsius;
 };
 
 export enum ConnectionState {
@@ -19,3 +20,4 @@ export enum ConnectionState {
 
 export type kW = number & { __brand: 'kW' };
 export type kWh = number & { __brand: 'kWh' };
+export type Celsius = number & { __brand: 'Celsius' };

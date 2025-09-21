@@ -1,4 +1,4 @@
-import { ConnectionState, kW, kWh } from './wallbox.model';
+import { ConnectionState, kW, kWh, Celsius } from './wallbox.model';
 import { Duration } from 'dayjs/plugin/duration';
 import dayjs from 'dayjs';
 import { testWallboxResponseBody } from './wallbox.repository.spec';
@@ -59,6 +59,15 @@ describe('WallboxService', () => {
 
     const expectedCharged = 42.5 as kWh;
     expect(state.charged).toBe(expectedCharged);
+  });
+
+  it('should map ambient temperature', async () => {
+    jest.spyOn(global, 'fetch').mockResolvedValue(new Response(testWallboxResponseBody({ ambient_temp: '18.7' })));
+
+    const state = await currentWallboxState();
+
+    const expectedTemperature = 18.7 as Celsius;
+    expect(state.ambientTemperature).toBe(expectedTemperature);
   });
 
   afterEach(() => {

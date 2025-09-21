@@ -17,6 +17,10 @@ describe('api', () => {
         value: 11.3,
         unit: Unit.kW,
       },
+      ambientTemperature: {
+        value: 22.5,
+        unit: Unit.Celsius,
+      },
     };
 
     expect(dto).toBeDefined();

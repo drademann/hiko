@@ -22,6 +22,7 @@ describe('WallboxComponent', () => {
     charged: { value: 10, unit: Unit.kWh },
     duration: { value: 1800, unit: Unit.Seconds },
     power: { value: 11.3, unit: Unit.kW },
+    ambientTemperature: { value: 22.5, unit: Unit.Celsius },
   };
 
   beforeEach(async () => {

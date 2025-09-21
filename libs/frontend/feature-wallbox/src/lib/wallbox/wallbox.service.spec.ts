@@ -23,6 +23,10 @@ describe('WallboxService', () => {
       value: 11.3,
       unit: Unit.kW,
     },
+    ambientTemperature: {
+      value: 22.5,
+      unit: Unit.Celsius,
+    },
   };
 
   beforeEach(() => {
@@ -76,7 +80,7 @@ describe('WallboxService', () => {
     req = mockedHttp.expectOne('/api/wallbox/state');
     expect(req.request.method).toBe('GET');
 
-    const updatedMockState = {
+    const updatedMockState: WallboxStateDTO = {
       ...mockWallboxState,
       connectionState: 'VehicleConnected',
       power: { value: 22.0, unit: Unit.kW },

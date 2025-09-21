@@ -5,4 +5,5 @@ export interface WallboxStateDTO {
   power: Measurement;
   charged: Measurement;
   duration: Measurement;
+  ambientTemperature: Measurement;
 }

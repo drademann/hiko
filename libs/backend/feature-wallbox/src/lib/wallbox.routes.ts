@@ -26,6 +26,7 @@ function from(state: WallboxState): WallboxStateDTO {
     charged: { value: state.charged, unit: Unit.kWh },
     duration: { value: state.duration.asSeconds(), unit: Unit.Seconds },
     power: { value: state.power, unit: Unit.kW },
+    ambientTemperature: { value: state.ambientTemperature, unit: Unit.Celsius },
   };
 }
 

@@ -1,4 +1,4 @@
-import { ConnectionState, kW, kWh, WallboxState } from './wallbox.model';
+import { ConnectionState, kW, kWh, Celsius, WallboxState } from './wallbox.model';
 import { Duration } from 'dayjs/plugin/duration';
 import dayjs from 'dayjs';
 import { fetchWallboxState } from './wallbox.repository';
@@ -10,6 +10,7 @@ export async function currentWallboxState(): Promise<WallboxState> {
     power: mapPower(rawState.get('power_w')),
     charged: mapCharged(rawState.get('transaction_wh')),
     duration: mapDuration(rawState.get('time_since_charging_start')),
+    ambientTemperature: mapAmbientTemperature(rawState.get('ambient_temp')),
   };
 }
 
@@ -46,5 +47,12 @@ function mapDuration(value: string | undefined): Duration {
     throw new Error('duration value is undefined');
   }
   return dayjs.duration(parseInt(value), 'seconds');
+}
+
+function mapAmbientTemperature(value: string | undefined): Celsius {
+  if (!value) {
+    throw new Error('ambient temperature value is undefined');
+  }
+  return parseFloat(value) as Celsius;
 }
 //endregion

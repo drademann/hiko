@@ -7,4 +7,5 @@ export enum Unit {
   kWh = 'kWh',
   kW = 'kW',
   Seconds = 'Seconds',
+  Celsius = '°C',
 }
