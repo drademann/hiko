@@ -27,7 +27,7 @@
       color: #1976d2;
       font-weight: 600;
       text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-      @include bp.responsive-font(3rem, 2rem, 1.6rem);
+      @include bp.responsive-font(3rem, 2rem, 2rem);
     }
   }
 }
@@ -35,6 +35,8 @@
 .metrics-grid {
   display: grid;
   margin-top: 2rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
 
   // standard Desktop/Pi Display (landscape)
   grid-template-columns: repeat(3, 1fr);
