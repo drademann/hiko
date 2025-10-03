@@ -3,11 +3,12 @@
 .wallbox-container {
   color: #19448a;
   padding: 1rem;
-  min-height: 340px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
   @include bp.mobile-portrait {
     padding: 1rem 0.5rem;
-    min-height: auto;
   }
 }
 
@@ -34,7 +35,7 @@
 
 .metrics-grid {
   display: grid;
-  margin-top: 2rem;
+  margin-top: 1rem;
   margin-left: 2rem;
   margin-right: 2rem;
 
@@ -101,5 +102,22 @@
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
     opacity: 0.9;
     @include bp.responsive-font(1.6rem, 1.6rem, 1.6rem);
+  }
+}
+
+.temperature-section {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-grow: 1;
+  padding-bottom: 1rem;
+}
+
+.temperature-badge {
+  color: #1565c0;
+  font-weight: 500;
+  @include bp.responsive-font(2.2rem, 2.2rem, 2rem);
+  @include bp.pi-display {
+    font-size: 3rem;
   }
 }

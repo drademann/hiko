@@ -36,4 +36,8 @@
       </div>
     </div>
   </div>
+
+  <div class="temperature-section">
+    <div class="temperature-badge">{{ wallboxState()?.ambientTemperature?.value | number: '1.0-0' }} °C</div>
+  </div>
 </div>
