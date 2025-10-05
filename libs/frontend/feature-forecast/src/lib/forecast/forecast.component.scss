@@ -1,0 +1,65 @@
+@use '../imports' as bp;
+
+.forecast-container {
+  color: #19448a;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-card {
+  border-radius: 0;
+  padding-left: 3rem;
+  padding-right: 1rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.chart-wrapper {
+  flex: 1;
+  position: relative;
+  min-height: 0; // Important for flex children to shrink below content size
+
+  canvas {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.chart-summary {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  @include bp.mobile-portrait {
+    padding: 0.4rem 0.8rem;
+  }
+
+  @include bp.mobile-landscape {
+    padding: 0.3rem 0.6rem;
+  }
+}
+
+.summary-value {
+  color: #1565c0;
+  font-weight: 700;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+  @include bp.responsive-font(1.5rem, 1.25rem, 1.125rem);
+
+  @include bp.pi-display {
+    font-size: 1.75rem;
+  }
+
+  @include bp.mobile-landscape {
+    font-size: 1rem;
+  }
+}

@@ -1,1 +1,11 @@
-<p style="margin-left: 100px">forecast works</p>
+<div class="forecast-container">
+  <div class="chart-card">
+    <div class="chart-summary">
+      <div class="summary-value">{{ totalProduction() | number: '1.1-1' }} kWh</div>
+    </div>
+
+    <div class="chart-wrapper">
+      <canvas baseChart [type]="chartType" [data]="chartData()" [options]="chartOptions"> </canvas>
+    </div>
+  </div>
+</div>
