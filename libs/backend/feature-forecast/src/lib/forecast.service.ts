@@ -10,5 +10,9 @@ export async function currentForecast(): Promise<Forecast> {
 }
 
 function powerValueOf(value: number, unit: string): PowerValue {
-  return { value, unit };
+  return { value: roundPower(value), unit };
+}
+
+function roundPower(value: number): number {
+  return Math.round(value * 10) / 10;
 }
