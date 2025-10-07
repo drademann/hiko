@@ -16,6 +16,10 @@
   display: flex;
   flex-direction: column;
   position: relative;
+
+  @include bp.mobile-landscape {
+    padding-left: 4.5rem;
+  }
 }
 
 .chart-wrapper {

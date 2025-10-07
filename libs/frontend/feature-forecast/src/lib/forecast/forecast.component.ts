@@ -32,9 +32,9 @@ export class ForecastComponent {
   readonly forecastData = this.forecastService.forecastData;
 
   readonly chartType: ChartType = 'bar';
-  readonly hourLabels = Array.from({ length: 24 }, (_, i) => `${i.toString().padStart(2, '0')}:00`);
+  readonly hourLabels = Array.from({ length: 24 }, (_, i) => `${i.toString().padStart(2, '0')}`);
 
-  // Computed signal for chart data
+  // computed signal for chart data
   readonly chartData = computed<ChartConfiguration['data']>(() => {
     const forecast = this.forecastData();
     if (!forecast?.powerValues || forecast.powerValues.length === 0) {
@@ -92,6 +92,9 @@ export class ForecastComponent {
           minRotation: 0,
           autoSkip: true,
           maxTicksLimit: 12,
+          font: {
+            size: 18,
+          },
         },
       },
       y: {
@@ -104,11 +107,14 @@ export class ForecastComponent {
           display: true,
           text: 'Leistung (kW)',
           font: {
-            size: 14,
+            size: 18,
           },
         },
         ticks: {
           color: '#1976d2',
+          font: {
+            size: 18,
+          },
         },
       },
     },

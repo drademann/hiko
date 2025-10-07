@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 import { ForecastComponent } from './forecast.component';
 import { ForecastService } from './forecast.service';
@@ -67,8 +67,9 @@ describe('ForecastComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [ForecastComponent, HttpClientTestingModule],
+      imports: [ForecastComponent],
       providers: [
+        provideHttpClientTesting(),
         { provide: DashboardService, useValue: mockDashboardService },
         { provide: ForecastService, useValue: mockForecastService },
       ],
@@ -91,18 +92,19 @@ describe('ForecastComponent', () => {
 
   it('should generate 24 hour labels', () => {
     expect(component.hourLabels).toHaveLength(24);
-    expect(component.hourLabels[0]).toBe('00:00');
-    expect(component.hourLabels[23]).toBe('23:00');
+    expect(component.hourLabels[0]).toBe('00');
+    expect(component.hourLabels[23]).toBe('23');
   });
 
   it('should refresh when dashboard service triggers forecast route', () => {
     const refreshSpy = jest.spyOn(mockForecastService, 'refresh');
 
-    // Create a new test bed with updated mock value
+    // create a new test bed with the updated mock value
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
-      imports: [ForecastComponent, HttpClientTestingModule],
+      imports: [ForecastComponent],
       providers: [
+        provideHttpClientTesting(),
         { provide: DashboardService, useValue: { currentRefreshRoute: signal({ route: 'forecast' }) } },
         { provide: ForecastService, useValue: mockForecastService },
       ],
@@ -111,13 +113,13 @@ describe('ForecastComponent', () => {
     fixture = TestBed.createComponent(ForecastComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    TestBed.flushEffects();
+    TestBed.tick();
 
     expect(refreshSpy).toHaveBeenCalled();
   });
 
   it('should handle empty forecast data', () => {
-    // Create a new component with empty forecast data
+    // create a new component with empty forecast data
     const emptyForecastService = {
       forecastData: signal(undefined),
       refresh: jest.fn(),
@@ -125,8 +127,9 @@ describe('ForecastComponent', () => {
 
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
-      imports: [ForecastComponent, HttpClientTestingModule],
+      imports: [ForecastComponent],
       providers: [
+        provideHttpClientTesting(),
         { provide: DashboardService, useValue: mockDashboardService },
         { provide: ForecastService, useValue: emptyForecastService },
       ],
