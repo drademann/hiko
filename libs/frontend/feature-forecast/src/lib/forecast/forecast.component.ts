@@ -54,11 +54,41 @@ export class ForecastComponent {
 
     const hourlyValues = forecast.powerValues.slice(1, 25).map((pv) => pv.value);
 
+    // find first and last non-zero indices to trim leading/trailing zeros
+    const firstNonZeroIndex = hourlyValues.findIndex((value) => value > 0);
+    let lastNonZeroIndex = -1;
+    for (let i = hourlyValues.length - 1; i >= 0; i--) {
+      if (hourlyValues[i] > 0) {
+        lastNonZeroIndex = i;
+        break;
+      }
+    }
+
+    // handle all-zero case
+    if (firstNonZeroIndex === -1) {
+      return {
+        labels: this.hourLabels,
+        datasets: [
+          {
+            data: hourlyValues,
+            backgroundColor: '#1976d2',
+            borderColor: '#1565c0',
+            borderWidth: 1,
+            label: 'Prognose',
+          },
+        ],
+      };
+    }
+
+    // slice to trim leading and trailing zeros, but preserve intermediate zeros
+    const trimmedValues = hourlyValues.slice(firstNonZeroIndex, lastNonZeroIndex + 1);
+    const trimmedLabels = this.hourLabels.slice(firstNonZeroIndex, lastNonZeroIndex + 1);
+
     return {
-      labels: this.hourLabels,
+      labels: trimmedLabels,
       datasets: [
         {
-          data: hourlyValues,
+          data: trimmedValues,
           backgroundColor: '#1976d2',
           borderColor: '#1565c0',
           borderWidth: 1,
@@ -92,9 +122,10 @@ export class ForecastComponent {
           minRotation: 0,
           autoSkip: true,
           maxTicksLimit: 12,
-          font: {
+          font: (context) => ({
             size: 18,
-          },
+            weight: context.tick.label === '12' ? 'bold' : 'normal',
+          }),
         },
       },
       y: {

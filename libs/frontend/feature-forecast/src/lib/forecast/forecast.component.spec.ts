@@ -143,4 +143,188 @@ describe('ForecastComponent', () => {
     expect(chartData.datasets[0].data).toEqual(Array(24).fill(0));
     expect(emptyComponent.totalProduction()).toBe(0);
   });
+
+  describe('chartData filtering', () => {
+    it('should filter out leading zeros (nighttime before sunrise)', () => {
+      const filteringForecastService = {
+        forecastData: signal({
+          powerValues: [
+            { value: 0.0, unit: Unit.kW }, // previous day - skipped
+            { value: 0.0, unit: Unit.kW }, // 00:00 - leading zero
+            { value: 0.0, unit: Unit.kW }, // 01:00 - leading zero
+            { value: 0.0, unit: Unit.kW }, // 02:00 - leading zero
+            { value: 2.0, unit: Unit.kW }, // 03:00 - first non-zero
+            { value: 5.0, unit: Unit.kW }, // 04:00
+            { value: 8.0, unit: Unit.kW }, // 05:00 - last non-zero
+            ...Array(18).fill({ value: 0.0, unit: Unit.kW }), // remaining hours
+          ],
+        }),
+        refresh: jest.fn(),
+      };
+
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        imports: [ForecastComponent],
+        providers: [
+          provideHttpClientTesting(),
+          { provide: DashboardService, useValue: mockDashboardService },
+          { provide: ForecastService, useValue: filteringForecastService },
+        ],
+      });
+
+      const testFixture = TestBed.createComponent(ForecastComponent);
+      const testComponent = testFixture.componentInstance;
+      testFixture.detectChanges();
+
+      const chartData = testComponent.chartData();
+
+      // should only include hours 03-05 (indices 3-5 in the 24-hour array)
+      expect(chartData.labels).toEqual(['03', '04', '05']);
+      expect(chartData.datasets[0].data).toEqual([2.0, 5.0, 8.0]);
+    });
+
+    it('should filter out trailing zeros (nighttime after sunset)', () => {
+      const filteringForecastService = {
+        forecastData: signal({
+          powerValues: [
+            { value: 0.0, unit: Unit.kW }, // previous day - skipped
+            { value: 3.0, unit: Unit.kW }, // 00:00 - first non-zero
+            { value: 6.0, unit: Unit.kW }, // 01:00
+            { value: 4.0, unit: Unit.kW }, // 02:00 - last non-zero
+            { value: 0.0, unit: Unit.kW }, // 03:00 - trailing zero
+            { value: 0.0, unit: Unit.kW }, // 04:00 - trailing zero
+            ...Array(19).fill({ value: 0.0, unit: Unit.kW }), // remaining hours
+          ],
+        }),
+        refresh: jest.fn(),
+      };
+
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        imports: [ForecastComponent],
+        providers: [
+          provideHttpClientTesting(),
+          { provide: DashboardService, useValue: mockDashboardService },
+          { provide: ForecastService, useValue: filteringForecastService },
+        ],
+      });
+
+      const testFixture = TestBed.createComponent(ForecastComponent);
+      const testComponent = testFixture.componentInstance;
+      testFixture.detectChanges();
+
+      const chartData = testComponent.chartData();
+
+      // should only include hours 00-02
+      expect(chartData.labels).toEqual(['00', '01', '02']);
+      expect(chartData.datasets[0].data).toEqual([3.0, 6.0, 4.0]);
+    });
+
+    it('should preserve intermediate zeros (cloudy periods during the day)', () => {
+      const filteringForecastService = {
+        forecastData: signal({
+          powerValues: [
+            { value: 0.0, unit: Unit.kW }, // previous day - skipped
+            { value: 0.0, unit: Unit.kW }, // 00:00 - leading zero
+            { value: 0.0, unit: Unit.kW }, // 01:00 - leading zero
+            { value: 2.0, unit: Unit.kW }, // 02:00 - first non-zero
+            { value: 5.0, unit: Unit.kW }, // 03:00
+            { value: 0.0, unit: Unit.kW }, // 04:00 - intermediate zero (cloudy)
+            { value: 0.0, unit: Unit.kW }, // 05:00 - intermediate zero (cloudy)
+            { value: 3.0, unit: Unit.kW }, // 06:00
+            { value: 4.0, unit: Unit.kW }, // 07:00 - last non-zero
+            ...Array(16).fill({ value: 0.0, unit: Unit.kW }), // remaining hours - trailing zeros
+          ],
+        }),
+        refresh: jest.fn(),
+      };
+
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        imports: [ForecastComponent],
+        providers: [
+          provideHttpClientTesting(),
+          { provide: DashboardService, useValue: mockDashboardService },
+          { provide: ForecastService, useValue: filteringForecastService },
+        ],
+      });
+
+      const testFixture = TestBed.createComponent(ForecastComponent);
+      const testComponent = testFixture.componentInstance;
+      testFixture.detectChanges();
+
+      const chartData = testComponent.chartData();
+
+      // should include hours 02-07, preserving the zeros at 04 and 05
+      expect(chartData.labels).toEqual(['02', '03', '04', '05', '06', '07']);
+      expect(chartData.datasets[0].data).toEqual([2.0, 5.0, 0.0, 0.0, 3.0, 4.0]);
+    });
+
+    it('should handle all-zero values by showing all 24 hours', () => {
+      const allZeroForecastService = {
+        forecastData: signal({
+          powerValues: [
+            { value: 0.0, unit: Unit.kW }, // previous day - skipped
+            ...Array(24).fill({ value: 0.0, unit: Unit.kW }), // all zeros for 24 hours
+          ],
+        }),
+        refresh: jest.fn(),
+      };
+
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        imports: [ForecastComponent],
+        providers: [
+          provideHttpClientTesting(),
+          { provide: DashboardService, useValue: mockDashboardService },
+          { provide: ForecastService, useValue: allZeroForecastService },
+        ],
+      });
+
+      const testFixture = TestBed.createComponent(ForecastComponent);
+      const testComponent = testFixture.componentInstance;
+      testFixture.detectChanges();
+
+      const chartData = testComponent.chartData();
+
+      // should show all 24 hours when all values are zero
+      expect(chartData.labels).toHaveLength(24);
+      expect(chartData.labels).toEqual(testComponent.hourLabels);
+      expect(chartData.datasets[0].data).toEqual(Array(24).fill(0));
+    });
+
+    it('should handle single non-zero value correctly', () => {
+      const singleValueForecastService = {
+        forecastData: signal({
+          powerValues: [
+            { value: 0.0, unit: Unit.kW }, // previous day - skipped
+            ...Array(12).fill({ value: 0.0, unit: Unit.kW }),
+            { value: 7.5, unit: Unit.kW }, // 12:00 - only non-zero
+            ...Array(11).fill({ value: 0.0, unit: Unit.kW }),
+          ],
+        }),
+        refresh: jest.fn(),
+      };
+
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        imports: [ForecastComponent],
+        providers: [
+          provideHttpClientTesting(),
+          { provide: DashboardService, useValue: mockDashboardService },
+          { provide: ForecastService, useValue: singleValueForecastService },
+        ],
+      });
+
+      const testFixture = TestBed.createComponent(ForecastComponent);
+      const testComponent = testFixture.componentInstance;
+      testFixture.detectChanges();
+
+      const chartData = testComponent.chartData();
+
+      // should show only the hour with the non-zero value
+      expect(chartData.labels).toEqual(['12']);
+      expect(chartData.datasets[0].data).toEqual([7.5]);
+    });
+  });
 });
